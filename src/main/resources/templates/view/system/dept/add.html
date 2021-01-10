@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增部门</title>
+       <link rel="stylesheet" th:href="@{~/component/pear/css/pear.css}" media="all">
+    <link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+            	<input type="hidden" id="id" name="id" >
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父部门</label>
+                    <div class="layui-input-block">
+                    	<input type="hidden" id="parentId"  name="parentId" class="layui-input">
+                    	<input type="text" id="parentName"  name="parentName" autocomplete="off" disabled="disabled" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入部门名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门负责人</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="leader" autocomplete="off" placeholder="请输入部门负责人" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人电话</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="phone" lay-verify="phone"  autocomplete="off" placeholder="请输入负责人电话" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="正常" checked>
+                        <input type="radio" name="status" value="0" title="禁用">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序序号</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="sort" autocomplete="off" placeholder="请输入排序序号" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="dept-save">
+                <i class="layui-icon layui-icon-release"></i> 确认新增
+            </button>
+            <button type="button" id="close" class="pear-btn pear-btn-danger pear-btn-sm" >
+                <i class="layui-icon layui-icon-close"></i> 取消
+            </button>
+        </div>
+    </div>
+</form>
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/common.js}" charset="utf-8"></script>
+<script>
+layui.use(['form','jquery','dtree','select'],function(){
+    let form = layui.form
+    	,dtree = layui.dtree
+    	,select = layui.select;
+    let $ = layui.jquery;
+    
+    var id = getQueryString("id");
+    
+    // 父部门赋值
+    $.get("/dept/selectById",{"id":id},function(result){
+    	if(result.code == 0){
+    		$("#id").val(result.data.id)
+    		$("#parentId").val(result.data.id);
+		    $("#parentName").val(result.data.name);
+    	}
+    });
+    
+    
+    form.on('submit(dept-save)', function(data){
+        $.ajax({
+            url:'/dept/insert',
+            data:JSON.stringify(data.field),
+            dataType:'json',
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        // parent.layui.table.reload("dept-table");
+                        window.parent.$("#search").click();//执行父页面的事件
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000});
+                }
+            }
+        })
+        return false;
+    });
+    
+    
+    
+    
+    
+    $("#close").click(function(){
+    	parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+    });
+})
+
+	
+
+
+</script>
+<script>
+</script>
+</body>
+</html>

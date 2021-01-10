@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增角色</title>
+    <link rel="stylesheet" th:href="@{~/component/pear/css/pear.css}" media="all">
+    <link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" lay-verify="required" name="name" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色key值</label>
+                    <div class="layui-input-block">
+                        <input type="text" lay-verify="required" name="roleKey" autocomplete="off" placeholder="请输入角色key值" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="正常" checked>
+                        <input type="radio" name="status" value="0" title="禁用">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单权限</label>
+                    <div class="layui-input-block">
+						<ul id="menuTree"  class="dtree" data-id="0"></ul>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="role-save">
+                <i class="layui-icon layui-icon-release"></i> 确认新增
+            </button>
+            <button type="button" id="close" class="pear-btn pear-btn-danger pear-btn-sm" >
+                <i class="layui-icon layui-icon-close"></i> 取消
+            </button>
+        </div>
+    </div>
+</form>
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script>
+layui.use(['form','jquery','dtree','select'],function(){
+    let form = layui.form
+    	,dtree = layui.dtree
+    	,select = layui.select;
+    let $ = layui.jquery;
+    
+    /* 渲染部门树形选择框 */
+   var DTreeNode = dtree.render({
+        elem: "#menuTree",
+        method: 'get',
+        ficon: ["1", "-1"],
+        icon:"2",
+        dataStyle: "layuiStyle",
+        url: "/menu/selectMenuTreeForRole",
+        checkbarType: "all", // 默认就是all，其他的值为： no-all  p-casc   self  only
+        response:{message:"msg",statusCode:0},
+        checkbar: true
+    });
+    
+    dtree.on("node(menuTree)", function(obj){
+		var nodeId = obj.param.nodeId;
+
+		DTreeNode.clickNodeCheckbar(nodeId);// 点击节点选中复选框
+   	});
+    
+    
+    form.on('submit(role-save)', function(data){
+    	
+    	var menuIds = [];
+    	var checkbarNodes = dtree.getCheckbarNodesParam("menuTree");
+		$.each(checkbarNodes,function(index,item){
+			menuIds.push(parseInt(item.nodeId));
+			data.field.menuIds = menuIds.toString();
+		});
+        
+        $.ajax({
+            url:'/role/insert',
+            data:JSON.stringify(data.field),
+            dataType:'json',
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.table.reload("role-table");
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000});
+                }
+            }
+        })
+        return false;
+    });
+    
+    $("#close").click(function(){
+    	parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+    });
+})
+
+
+</script>
+<script>
+</script>
+</body>
+</html>

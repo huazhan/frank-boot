@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>角色管理</title>
+<link rel="stylesheet" th:href="@{~/component/layui/css/layui.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/dtree.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/font/dtreefont.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/button.css}" media="all">
+<link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+</head>
+<body style="overflow-y: hidden;">
+	<div class="my-header ">
+		<div >
+			<form class="layui-form layui-inline" name="searchForm">
+				<div class="layui-input-inline">
+				  <input type="text" name="name"  autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+				  <input type="text" name="roleKey"  autocomplete="off" placeholder="请输入角色key值" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+				  <select name="status">
+			        <option value="">请选择角色状态</option>
+			        <option value="1">正常</option>
+			        <option value="0">禁用</option>
+			      </select>
+				</div>
+			
+				<div style="margin-top: 16px;">
+					<div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+					</div>
+					<div class="layui-inline">
+						<button type="reset" class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-danger" id="batchDelete" ><i class="layui-icon layui-icon-delete"></i> 批量删除 </button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+<!-- 列表表格数据 -->
+<table class="my-table" id="role-table" lay-filter="role-table"></table>
+
+<!-- 列表工具：编辑、删除 -->
+<script type="text/html" id="role-bar">
+	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
+	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
+</script>
+
+<!-- 列表账号状态开关：0-禁用，1-正常 -->
+<script type="text/html" id="role-status">
+	<input type="checkbox" name="{{d.id}}" value="{{d.status}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="role-status"  {{ d.status == 1 ? 'checked' : '' }}>
+</script>
+
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/jquery-1.11.2.min.js}" charset="utf-8"></script>
+<script type="text/javascript">
+	
+layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
+	var $ = layui.jquery
+	  ,form = layui.form
+	  ,layer = layui.layer
+	  ,laypage = layui.laypage
+	  ,table = layui.table
+	  ,dtree = layui.dtree;
+	
+	/* 表格渲染 */
+	table.render({
+	  elem: '#role-table' //指定原始表格元素选择器（推荐id选择器）
+	  ,url: '/role/list'
+	  ,toolbar:true
+	  ,defaultToolbar: ['filter']
+	  ,parseData: function(res){ //res 即为原始返回的数据
+		    return {
+		      "code": res.code, //解析接口状态
+		      "msg": res.msg, //解析提示文本
+		      "count": res.data.total, //解析数据长度
+		      "data": res.data.list //解析数据列表
+		    };
+	   }
+	  ,page: true
+	  ,height: 'full-188' //容器高度
+	  //设置表头
+	  ,cols: [ [
+		  	{checkbox: true}
+		    ,{type: 'numbers', title: '序号', width: 80, align: 'center',}
+		    ,{field: 'name', title: '角色名称', align: 'center'}
+		    ,{field: 'roleKey', title: '角色key值', align: 'center', templet: '#user-sex'}
+		    ,{field: 'status', title: '角色状态', align: 'center', templet: '#role-status'}
+		    ,{field: 'createTime', title: '创建时间', align: 'center',width:180}
+		    ,{toolbar: '#role-bar', title: '操作', minWidth: 120,  align: 'center',}
+	  ]] 
+	  
+	});
+	
+	/* 工具条上的事件 */
+	table.on('toolbar(role-table)', function(obj) {
+		if (obj.event === 'refresh') {
+			window.refresh();
+		}
+	});
+	
+	/* 列表中的工具上的按钮事件 */
+	table.on('tool(role-table)', function(obj) {
+		if (obj.event === 'delete') {
+			window.delete(obj);
+		} else if (obj.event === 'edit') {
+			window.edit(obj);
+		}
+	});
+	
+	/* 点击查询按钮 */
+	form.on('submit(search)', function(data) {
+		table.reload('role-table', {
+			where: data.field
+		})
+		return false;
+	});
+	
+	
+	/* 账号状态开关事件 */
+	form.on('switch(role-status)', function(obj) {
+		var id = obj.elem.name;
+		var status = obj.elem.checked ? '1' : '0';
+		var data = {"id":id,"status":status}
+		
+		if(id == 1){
+    		layer.msg('禁止编辑超级管理员角色【admin】',{icon:2,time:2000},function(){window.refresh();});
+    		return false;
+    	}
+		
+		$.ajax({
+            url:"/role/updateStatus",
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000});
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000});
+                }
+            }
+        })
+	});
+		
+	/* 刷新table */
+    window.refresh = function(param) {
+		table.reload('role-table');
+	}
+	
+    /* 点击编辑，弹出编辑页面 */
+    window.edit = function(obj) {
+    	if(obj.data.id == 1){
+    		layer.msg('禁止编辑超级管理员角色【admin】',{icon:2,time:2000});
+    		return false;
+    	}
+		layer.open({
+			type: 2,
+			title: '修改角色信息',
+			shade: 0.1,
+			area: ['500px', '520px'],
+			content: '/role-edit?id='+obj.data.id
+		});
+	}
+    
+    /* 点击删除，删除用户 */
+    window.delete = function(obj) {
+    	if(obj.data.id == 1){
+    		layer.msg('禁止删除超级管理员角色【admin】',{icon:2,time:3000});
+    		return false;
+    	}
+		layer.confirm('确定要删除该角色【'+obj.data.name+'】', {
+			icon: 3,
+			title: '提示'
+		}, function(index) {
+			layer.close(index,{time: 5*1000});
+			let loading = layer.load();
+			let id = obj.data.id;
+			$.post("/role/delete",{"id":id},function(result){
+				layer.close(loading);
+                if(result.code == 0){
+                	layer.msg(result.msg, {
+						icon: 1,
+						time: 1000
+					}, function() {
+						obj.del();
+					});
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000});
+                }
+			});
+		});
+	}
+    
+    /* 点击批量删除 */
+    window.batchDelete = function(obj) {
+    	var tableData = table.checkStatus("role-table");
+		var data = tableData.data;
+		if (data.length === 0) {
+			layer.msg("未选中数据", {
+				icon: 3,
+				time: 1000
+			});
+			return false;
+		}
+		let idList = [];
+		for (let i = 0; i < data.length; i++) {
+			if(data[i].id == 1){
+	    		layer.msg('禁止删除超级管理员角色【admin】',{icon:2,time:3000});
+	    		return false;
+	    	}
+			idList.push(data[i].id);
+		}
+		
+		layer.confirm('确定要删除选中的【'+data.length+'】条数据', {
+			icon: 3,
+			title: '提示'
+		}, function(index) {
+			layer.close(index);
+			let loading = layer.load();
+			$.ajax({
+				url: "/role/batchDelete",
+				data:JSON.stringify(idList),
+				contentType:"application/json",
+				type: 'post',
+				success: function(result) {
+					layer.close(loading);
+					if (result.code == 0) {
+						layer.msg(result.msg, {
+							icon: 1,
+							time: 1000
+						}, function() {
+							table.reload('role-table');
+						});
+					} else {
+						layer.msg(result.msg, {
+							icon: 2,
+							time: 2000
+						});
+					}
+				}
+			})
+		});
+	}
+	
+})
+
+/* 点击添加按钮，弹出添加页面 */
+$("#add").click(function(){
+	layer.open({
+		type: 2,
+		title: '新增角色',
+		shade: 0.1,
+		area: ['500px', '520px'],
+		content: '/role-add'
+	});
+});
+
+/* 点击批量删除 */
+$("#batchDelete").click(function(){
+	window.batchDelete();
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+frank-boot:
+  # 名称
+  name: frank-boot权限管理框架
+  # 当前版本
+  version: v1.0.0
+  # 版权信息
+  copyright: © 2020 www.chenhuazhan.com All Rights Reserved
+  # 文件上传路径
+  filePath: 
+      images: /images/
+spring: 
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://localhost:3306/frank-dev?useAffectedRows=true&useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: 123456
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      filters: stat,wall,logback
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  thymeleaf:
+        # thymeleaf页面缓存，开发时设为false,上线时设置true
+        cache: false
+        # prefix: classpath:/templates/
+        # suffix: .html

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>菜单管理</title>
+<link rel="stylesheet" th:href="@{~/component/layui/css/layui.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/dtree.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/font/dtreefont.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/treetable.css}" media="all">
+<link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/button.css}" media="all">
+<link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+</head>
+<body style="overflow-y: hidden;" >
+	<div class="my-header ">
+		<div >
+			<form class="layui-form layui-inline" name="searchForm">
+				<div class="layui-input-inline">
+				  <input type="text" name="name"  autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+				  <input type="text" name="perms"  autocomplete="off" placeholder="请输入权限标识" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+				  <select name="type">
+			        <option value="">请选择菜单类型</option>
+			        <option value="1">目录</option>
+			        <option value="2">菜单</option>
+			        <option value="3">按钮</option>
+			      </select>
+				</div> 
+				<div class="layui-input-inline">
+				  <select name="status">
+			        <option value="">请选择菜单状态</option>
+			        <option value="1">正常</option>
+			        <option value="0">隐藏</option>
+			      </select>
+				</div> 
+			
+				<div style="margin-top: 16px;">
+					<div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search" id="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+					</div>
+					<div class="layui-inline">
+						<button type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
+					</div>
+					<!-- <div class="layui-inline">
+						<button type="button" class="pear-btn pear-btn-danger" id="batchDelete" ><i class="layui-icon layui-icon-delete"></i> 批量删除 </button>
+					</div> -->
+				</div>
+			</form>
+		</div>
+	</div> 
+
+<!-- 列表表格数据 -->
+<table class="my-table" id="menu-table" lay-filter="menu-table"></table>
+
+<!-- 展开/折叠 按钮 -->
+<script type="text/html" id="menu-toolbar">
+	<button class="pear-btn pear-btn-success pear-btn-md" lay-event="expandAll">
+	    <i class="layui-icon layui-icon-spread-left"></i>
+	    展开
+	</button>
+	<button class="pear-btn pear-btn-success pear-btn-md" lay-event="foldAll">
+	    <i class="layui-icon layui-icon-shrink-right"></i>
+	    折叠
+	</button>
+</script>
+
+<!-- 列表工具：编辑、删除 -->
+<script type="text/html" id="dept-bar" >
+	<button {{d.type == '3' ? 'style="visibility: hidden"' : ''}}  class="pear-btn pear-btn-success pear-btn-sm" lay-event="add" title="新增子菜单"><i class="layui-icon layui-icon-add-1"></i></button>
+	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
+	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
+</script>
+
+<!-- 列表状态：0-隐藏，1-显示-->
+<script type="text/html" id="menu-status">
+	<input type="checkbox" id="{{d.id}}" name={{d.parentId}} value="{{d.status}}" lay-skin="switch" lay-text="显示|隐藏"   lay-filter="menu-status"  {{ d.status == 1 ? 'checked' : '' }}>
+</script>
+
+<!-- 菜单类型转义：1-目录，2-菜单，3-按钮 -->
+<script type="text/html" id="menu-type">
+	{{ d.type==1 ? '<span>目录</span>': d.type==2 ? '<span>菜单</span>' : '<span>按钮</span>' }} 
+</script>
+
+<script type="text/html" id="menu-icon">
+	{{'<i class="layui-icon '+d.icon+'"></i>'}}
+</script>
+
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/jquery-1.11.2.min.js}" charset="utf-8"></script>
+<script type="text/javascript">
+	
+layui.use(['form', 'layedit', 'laydate','element','table','dtree','treetable'], function(){
+	var $ = layui.jquery
+	  ,form = layui.form
+	  ,layer = layui.layer
+	  ,laypage = layui.laypage
+	  ,table = layui.table
+	  ,dtree = layui.dtree
+	  ,treetable = layui.treetable;
+	
+	var globalData = {};
+	
+	var flag = true; // 表格区分标志：true-树形表格，false-普通表格
+	
+	/* 渲染树形表格 */
+	window.renderTreeTable = function(data){
+		treetable.render({
+		   treeColIndex: 1
+		   ,treeSpid: 0 
+		   ,treeIdName: 'id'
+		   ,treePidName: 'parentId' 
+		   //,skin:'line'
+		  ,toolbar:true
+		  ,treeDefaultClose: true
+	      ,toolbar:'#menu-toolbar'
+		  ,defaultToolbar: ['filter']
+		  ,elem: '#menu-table' //指定原始表格元素选择器（推荐id选择器）
+		  ,url: '/menu/list'
+		  ,where: data
+		  ,page: false
+		  ,height: 'full-188' //容器高度
+		  //设置表头
+		  ,cols: [ [
+			  	/* {checkbox: true} */
+			    {field: 'icon', title: '菜单图标', align: 'center',width:100, templet: '#menu-icon'}
+			    ,{field: 'name', title: '菜单名称', align: 'center',style:'text-align:left' }
+			    ,{field: 'url', title: '请求地址', align: 'center',width:220}
+			    ,{field: 'type', title: '菜单类型', align: 'center',width:120, templet: '#menu-type'}
+			    ,{field: 'perms', title: '权限标识', align: 'center',width:160}
+			    ,{field: 'status', title: '菜单状态', align: 'center' ,width:100, templet: '#menu-status'}
+			    ,{field: 'sort', title: '排序', align: 'center',width:80,}
+			    ,{field: 'createTime', title: '创建时间', align: 'center',width:180}
+			    ,{toolbar: '#dept-bar', title: '操作', width: 220,  align: 'center'}
+		  ]] 
+		  
+		});
+	}
+	
+	// 渲染普通表格
+	window.renderTable = function(data){
+		table.render({
+		  toolbar:true
+	      ,toolbar:'#menu-toolbar'
+		  ,defaultToolbar: ['filter']
+		  ,elem: '#menu-table' //指定原始表格元素选择器（推荐id选择器）
+		  ,url: '/menu/list'
+		  ,where: data
+		  ,page: false
+		  ,height: 'full-188' //容器高度
+		  //设置表头
+		  ,cols: [ [
+			  	/* {checkbox: true} */
+			  	{field: 'icon', title: '菜单图标', align: 'center',width:100, templet: '#menu-icon'}
+			  	,{field: 'name', title: '菜单名称', align: 'center' }
+			    ,{field: 'url', title: '请求地址', align: 'center',width:220}
+			    ,{field: 'type', title: '菜单类型', align: 'center',width:120,templet: '#menu-type'}
+			    ,{field: 'perms', title: '权限标识', align: 'center',width:160}
+			    ,{field: 'status', title: '菜单状态', align: 'center',width:100,templet: '#menu-status'}
+			    ,{field: 'sort', title: '排序', align: 'center',width:80,}
+			    ,{field: 'createTime', title: '创建时间', align: 'center',width:180}
+			    ,{toolbar: '#dept-bar', title: '操作', width: 220,  align: 'center',}
+		  ]] 
+		  
+		});
+	}
+	
+	// 判断最终是渲染树形表格还是普通表格
+	window.render = function(data){
+		if(flag){
+			renderTreeTable(data);
+		}else{
+			renderTable(data);
+		}
+	}
+	
+	render(globalData);
+	
+	/* 点击查询按钮 */
+	form.on('submit(search)', function(res) {
+		globalData = res.field;
+		if(globalData.name == '' && globalData.perms == '' && globalData.type == '' && globalData.status == ''){
+			flag = true;
+		}else{
+			flag = false;
+		}
+		render(globalData);
+		return false;
+	});
+	
+	/* 工具条上的事件 */
+	table.on('toolbar(menu-table)', function(obj) {
+		if (obj.event === 'refresh') {
+			render(globalData);
+		}else if(obj.event === 'expandAll'){
+			 treetable.expandAll("#menu-table");
+		} else if(obj.event === 'foldAll'){
+			 treetable.foldAll("#menu-table");
+		}
+	});
+	
+	/* 列表中的工具上的按钮事件 */
+	table.on('tool(menu-table)', function(obj) {
+		if (obj.event === 'delete') {
+			window.delete(obj);
+		} else if (obj.event === 'edit') {
+			window.edit(obj);
+		}else if (obj.event === 'add') {
+			window.add(obj);
+		}
+	});
+	
+	
+	/* 状态开关事件 */
+	form.on('switch(menu-status)', function(obj) {
+		var status = obj.elem.checked ? '1' : '0';
+		var id = obj.elem.id;
+		var parentId = obj.elem.name;
+		var data = {"id":id,"status":status}
+		
+		$.ajax({
+            url:"/menu/update",
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                    	render(globalData);
+                    });
+                	
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000},function(){
+                    	render(globalData);
+                    });
+                }
+            }
+        })
+	});
+	
+	window.update = function(data){
+		$.ajax({
+            url:"/menu/updateStatusById",
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                    	render(globalData);
+                    });
+                	
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000},function(){
+                    	render(globalData);
+                    });
+                }
+            }
+        })
+	}
+	
+    /* 点击编辑，弹出编辑页面 */
+    window.edit = function(obj) {
+		layer.open({
+			type: 2,
+			title: '修改菜单信息',
+			shade: 0.1,
+			area: ['500px', '540px'],
+			content: '/menu-edit?id='+obj.data.id
+		});
+	}
+    
+    window.add = function(obj) {
+    	layer.open({
+    		type: 2,
+    		title: '新增菜单',
+    		shade: 0.1,
+    		area: ['500px', '540px'],
+    		content: '/menu-add?id='+obj.data.id
+    	});
+	}
+    
+    /* 点击删除 */
+    window.delete = function(obj) {
+    	
+    	var ids = [1, 2, 3, 4, 5, 9, 10, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+    	var value = $.inArray(obj.data.id, ids);
+    	console.log('obj.data.id',obj.data.id);
+    	console.log('value',value);
+    	if(value != -1){
+    		layer.msg('禁止删除系统演示初始化菜单数据',{icon:2,time:3000});
+    		return false;
+    	}
+    	
+		layer.confirm('确定要删除该菜单【'+obj.data.name+'】', {
+			icon: 3,
+			title: '提示'
+		}, function(index) {
+			let loading = layer.load();
+			let id = obj.data.id;
+			$.post("/menu/delete",{"id":id},function(result){
+				layer.close(loading);
+	            if(result.code == 0){
+	            	layer.msg(result.msg, {icon: 1,time: 1000}, function() {
+						render(globalData);
+					});
+	            }else{
+	                layer.msg(result.msg,{icon:2,time:3000});
+	            }
+			});
+		});
+	}
+    
+	
+})
+
+/* 点击添加按钮，弹出添加页面 */
+$("#add").click(function(){
+	layer.open({
+		type: 2,
+		title: '新增菜单',
+		shade: 0.1,
+		area: ['500px', '540px'],
+		content: 'menu-add?id=0'
+	});
+});
+
+
+
+</script>
+
+</body>
+</html>

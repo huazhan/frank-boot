@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frank.core.system.role.mapper.RoleMapper">
+  
+  <resultMap id="selectByIdResultMap" type="com.frank.core.system.role.entity.Role" >
+  		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="role_key" property="roleKey"/>
+		<result column="status" property="status"/>
+		<result column="create_time" property="createTime"/>
+		<result column="create_by" property="createBy"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="update_by" property="updateBy"/>
+		<result column="remark" property="remark"/>
+  		<collection property="menuList" ofType="com.frank.core.system.menu.entity.Menu">
+  			<id column="menuId" property="id"/>
+  			<result column="menuName" property="name"/>
+  		</collection>
+  </resultMap>
+  
+  <select id="selectById" resultMap="selectByIdResultMap">
+  		SELECT
+			a.*,
+			c.id as "menuId",
+			c.name as "menuName"
+		FROM
+			sys_role a LEFT JOIN sys_role_menu b ON a.id = b.role_id 
+			LEFT JOIN sys_menu c ON b.menu_id = c.id
+		WHERE
+			a.id = #{id}
+  </select>
+  
+  <select id="list" resultType="com.frank.core.system.role.entity.Role">
+  		select *
+  		from sys_role a 
+  		<where>
+  			<if test="name != null and name != ''">
+  				and a.name like concat('%',#{name},'%') 
+  			</if>
+  			<if test="roleKey != null and roleKey != ''">
+  				and a.role_key like concat('%',#{roleKey},'%')
+  			</if>
+  			<if test="status != null and status != ''">
+  				and a.status = #{status}
+  			</if>
+  		</where>
+  		order by a.create_time
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true"  keyProperty="id">
+  		insert into sys_role(
+  			name,
+  			role_key,
+  			status,
+  			create_by,
+  			create_time,
+  			update_by,
+  			remark
+  		)values(
+  			#{name},
+  			#{roleKey},
+  			#{status},
+  			#{createBy},
+  			#{createTime},
+  			#{updateBy},
+  			#{remark}
+  		)
+  </insert>
+  
+  <update id="update">
+  		update sys_role
+  		<set>
+  			<if test="name != null and name != ''">
+  				,name = #{name}
+  			</if>
+  			<if test="roleKey != null and roleKey != ''">
+  				,role_key = #{roleKey}
+  			</if>
+  			<if test="status != null and status != ''">
+  				,status = #{status}
+  			</if>
+  			<if test="updateBy != null and updateBy != ''">
+  				,update_by = #{updateBy}
+  			</if>
+  			<if test="remark != null and remark != ''">
+  				,remark = #{remark}
+  			</if>
+  		</set>
+  		where id = #{id}
+  </update>
+  
+  <delete id="delete">
+  		delete from sys_role where id = #{id}
+  </delete>
+  
+  <delete id="batchDelete">
+  		delete from sys_role where id in 
+  		<foreach index="index" collection="idList" item="item"  separator="," open="(" close=")" >
+  			#{item}
+  		</foreach>
+  </delete>
+  
+  <insert id="insertRoleMenu">
+  		insert into sys_role_menu (role_id, menu_id) values (#{roleId}, #{menuId})
+  </insert>
+  
+  <select id="deleteRoleMenuByRoleId">
+  		delete from sys_role_menu where role_id = #{id}
+  </select>
+  
+  <select id="deleteUserRoleByRoleId">
+  		delete from sys_user_role where role_id = #{id}
+  </select>
+  
+
+  
+  
+</mapper>

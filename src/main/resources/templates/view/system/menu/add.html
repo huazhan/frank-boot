@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增菜单</title>
+    <link rel="stylesheet" th:href="@{~/component/pear/css/pear.css}" media="all">
+    <link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+            	<input type="hidden" id="id" name="id" >
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级菜单</label>
+                    <div class="layui-input-block">
+                    	<input type="hidden" id="parentId"  name="parentId" class="layui-input">
+                    	<input type="text" id="parentName"  name="parentName" autocomplete="off" disabled="disabled" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+				    <label class="layui-form-label">菜单类型</label>
+				    <div class="layui-input-block" lay-filter="filterType">
+				      <input type="radio" lay-filter="filterType" name="type" value="1" title="目录" checked>
+				      <input type="radio" lay-filter="filterType" name="type" value="2" title="菜单" >
+				      <input type="radio" lay-filter="filterType" name="type" value="3" title="按钮" >
+				    </div>
+				</div>
+				
+                <div class="layui-form-item" id="openTypeDiv">
+				    <label class="layui-form-label">打开方式</label>
+				    <div class="layui-input-block">
+				      <input type="radio" name="openType" value="_iframe" title="页签" checked>
+				      <input type="radio" name="openType" value="_blank" title="新窗口" >
+				    </div>
+				</div>
+				
+				<div class="layui-form-item" id="iconDiv">
+                    <label class="layui-form-label">菜单图标</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="icon" name="icon" autocomplete="off" placeholder="请输入菜单图标" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="urlDiv">
+                    <label class="layui-form-label">请求地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="url" autocomplete="off" placeholder="请输入请求地址" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限标识</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="perms" autocomplete="off" placeholder="请输入权限标识" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item" style="display:none">
+                    <label class="layui-form-label">菜单状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="显示" checked>
+                        <input type="radio" name="status" value="0" title="隐藏">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序序号</label>
+                    <div class="layui-input-block">
+                        <input type="text" lay-verify="number" value="1" name="sort" autocomplete="off" placeholder="请输入排序序号" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="dept-save">
+                <i class="layui-icon layui-icon-release"></i> 确认新增
+            </button>
+            <button type="button" id="close" class="pear-btn pear-btn-danger pear-btn-sm" >
+                <i class="layui-icon layui-icon-close"></i> 取消
+            </button>
+        </div>
+    </div>
+</form>
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/common.js}" charset="utf-8"></script>
+<script>
+layui.use(['form','jquery','dtree','select','iconPicker'],function(){
+    let form = layui.form
+    	,dtree = layui.dtree
+    	,select = layui.select
+    	,iconPicker = layui.iconPicker;
+    let $ = layui.jquery;
+    
+    var id = getQueryString("id");
+    
+    if(id == 0){
+    	$("#parentId").val(0);
+		$("#parentName").val("无");
+    	$("input[name=type][value=1]").attr("checked",true);
+    	//$("input[name=type][value=2]").attr("disabled", true);
+        $("input[name=type][value=3]").attr("disabled", true);
+        $("#urlDiv").hide();
+    	$("#openTypeDiv").hide();
+        form.render(); //更新全部   
+    }else {
+	    // 上级菜单赋值
+	    $.get("/menu/selectById",{"id":id},function(result){
+	    	if(result.code == 0){
+	    		$("#id").val(result.data.id)
+	    		$("#parentId").val(result.data.id);
+			    $("#parentName").val(result.data.name);
+			    
+			    if(result.data.type == '1'){
+	            	$("input[name=type][value=1]").attr("disabled", true);
+			    	$("input[name=type][value=2]").attr("checked",true);
+		            $("input[name=type][value=3]").attr("disabled", true);
+		            $("#iconDiv").hide();
+	            }else if(result.data.type == '2'){
+	            	$("input[name=type][value=1]").attr("disabled", true);
+		            $("input[name=type][value=2]").attr("disabled", true);
+	            	$("input[name=type][value=3]").attr("checked",true);
+		            $("#iconDiv").hide();
+		            $("#urlDiv").hide();
+		            $("#openTypeDiv").hide();
+	            }
+			    
+			    form.render(); //更新全部   
+	    	}
+	    });
+    }
+    
+    // 初始化图标选择
+    iconPicker.render({
+        elem: '#icon',
+        type: 'fontClass',
+        search: true,
+        page: true,
+        limit: 16,
+        click: function(data) {
+        	// 选择
+           var icon = data.icon;
+        	$("#icon").val(icon);
+        },
+        success: function(d) {
+        	// 初始化成功
+        }
+    });
+    
+    form.on('radio(filterType)', function(data){
+    	var value = data.value;//被点击的radio的value值
+    	if(value == 1){ // 选择了目录
+    		$("#urlDiv").hide();
+    		$("#openTypeDiv").hide();
+    	}else if(value == 2){ // 选择了菜单
+    		$("#urlDiv").show();
+    		$("#openTypeDiv").show();
+    	}
+    });  
+    
+    form.on('submit(dept-save)', function(data){
+    	console.log('data:',data);
+        $.ajax({
+            url:'/menu/insert',
+            data:JSON.stringify(data.field),
+            dataType:'json',
+            contentType:'application/json',
+            type:'post',
+            success:function(result){
+                if(result.code == 0){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        // parent.layui.table.reload("dept-table");
+                        window.parent.$("#search").click();//执行父页面的事件
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:2,time:3000});
+                }
+            }
+        })
+        return false;
+    });
+    
+    
+    
+    
+    
+    $("#close").click(function(){
+    	parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+    });
+})
+
+	
+
+
+</script>
+<script>
+</script>
+</body>
+</html>

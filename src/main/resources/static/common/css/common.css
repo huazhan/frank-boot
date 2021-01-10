@@ -1,0 +1,48 @@
+/* 自定义部门树选中样式 */
+.dtree-theme-item-this{background-color: #5FB878!important;color: #fff!important;}
+.dtree-theme-item:hover{background-color: #eaeceb!important;}
+.dtree-theme-item cite{font-size:12px!important;}
+.dtree-theme-item:hover cite{color:#000!important;}
+
+.my-header{
+	margin: 16px;
+	margin-bottom: 0px !important;
+    background-color: #fff;
+    padding: 24px 14px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px;
+}
+
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    background-color: #5FB878 !important;
+}
+
+.layui-table-view{
+	margin: 16px !important;
+   	border-radius: 8px;
+   	box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px;
+}
+
+.layui-table-tool{
+	background-color: #fff;
+	border-radius: 32px;
+   	border: hidden;
+   	z-index: 100;
+}
+
+.layui-table-body {
+    overflow-x: hidden !important;
+}
+
+.layui-table-tool .layui-table-tool-self .layui-inline[lay-event]{
+	border-radius: 4px;
+}
+
+.layui-input-inline{
+	margin-right: 8px;
+}
+
+input:disabled{
+	cursor: not-allowed;
+	color: #888;
+}
