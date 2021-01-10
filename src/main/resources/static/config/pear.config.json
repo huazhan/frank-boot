@@ -1,7 +1,7 @@
 {
 	"logo": {
 		"title": "frank-boot",
-		"image": "admin/images/logo.png"
+		"image": "admin/images/logo-cat.png"
 	},
 	"menu": {
 		"data": "/menu/selectMenuTree",
