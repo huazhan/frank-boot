@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.frank.core.system.user.mapper.UserMapper;
 import com.frank.framework.security.entity.RoleAndPerms;
-import com.frank.framework.util.UserUtil;
+import com.frank.framework.util.UserUtils;
 
 import cn.hutool.core.collection.CollUtil;
 
@@ -48,7 +48,7 @@ public class SecurityUtil {
 	 * 刷新当前在线用户的权限
 	 */
 	public void refreshGrantedAuthority() {
-		System.out.println("当前登录人："+UserUtil.getCurrentUsername());
+		System.out.println("当前登录人："+UserUtils.getCurrentUsername());
 		List<GrantedAuthority> authorities = new ArrayList<>();
 
 		List<Object> allPrincipals = sessionRegistry.getAllPrincipals();

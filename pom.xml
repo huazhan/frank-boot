@@ -19,6 +19,7 @@
 		<java.version>1.8</java.version>
 		<!-- Maven打包时候跳过测试 -->
     	<skipTests>true</skipTests>
+    	<maven-jar-plugin.version>2.6</maven-jar-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -46,6 +47,11 @@
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
 		<dependency>

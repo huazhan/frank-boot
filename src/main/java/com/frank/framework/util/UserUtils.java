@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @author Frank
  *
  */
-public class UserUtil {
+public class UserUtils {
 
 	/**
 	 * 	获取用户登录名
