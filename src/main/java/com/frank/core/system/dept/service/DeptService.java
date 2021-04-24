@@ -14,8 +14,10 @@ import com.frank.core.system.dept.mapper.DeptMapper;
 import com.frank.core.system.user.entity.User;
 import com.frank.core.system.user.mapper.UserMapper;
 import com.frank.framework.exception.BusinessException;
+import com.frank.framework.util.UserUtils;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -44,6 +46,10 @@ public class DeptService {
 	}
 
 	public void insert(Dept dept) {
+		dept.setCreateBy(UserUtils.getCurrentUsername());
+		dept.setCreateTime(DateUtil.date());
+		dept.setUpdateBy(UserUtils.getCurrentUsername());
+		dept.setUpdateTime(DateUtil.date());
 		// 查询当前部门表数据中最大的id值
 		long maxId = deptMapper.selectMaxId();
 		long id = dept.getId();
@@ -59,6 +65,8 @@ public class DeptService {
 
 	@Transactional(value = "transactionManager")
 	public void update(Dept dept) {
+		dept.setUpdateBy(UserUtils.getCurrentUsername());
+		dept.setUpdateTime(DateUtil.date());
 		long id = dept.getId();
 		long parentId = dept.getParentId() == 0L ? id : dept.getParentId();
 		Dept parentDept = deptMapper.selectById(parentId); // 所选择的父部门
@@ -78,6 +86,8 @@ public class DeptService {
 	}
 	
 	public void updateStatusByParentId(Dept dept) {
+		dept.setUpdateBy(UserUtils.getCurrentUsername());
+		dept.setUpdateTime(DateUtil.date());
 		if (dept != null && 0 == dept.getParentId() && "0".equals(dept.getStatus())) {
 			throw new BusinessException("总部不能禁用");
 		}

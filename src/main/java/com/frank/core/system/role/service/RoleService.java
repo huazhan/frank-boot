@@ -10,7 +10,9 @@ import com.frank.core.system.role.entity.Role;
 import com.frank.core.system.role.entity.RoleMenu;
 import com.frank.core.system.role.mapper.RoleMapper;
 import com.frank.framework.security.util.SecurityUtil;
+import com.frank.framework.util.UserUtils;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
 @Service
@@ -34,6 +36,12 @@ public class RoleService {
 
 	@Transactional(value = "transactionManager")
 	public void insert(Role role) {
+		
+		role.setCreateBy(UserUtils.getCurrentUsername());
+		role.setCreateTime(DateUtil.date());
+		role.setUpdateBy(UserUtils.getCurrentUsername());
+		role.setUpdateTime(DateUtil.date());
+		
 		roleMapper.insert(role);
 		// mapper.xml的insert中使用标签 useGeneratedKeys="true"  keyProperty="id" ，会在插入成功后自动将id值返回到实体类对应id字段中
 		long roleId = role.getId();
@@ -47,6 +55,10 @@ public class RoleService {
 
 	@Transactional(value = "transactionManager")
 	public void update(Role role) {
+		
+		role.setUpdateBy(UserUtils.getCurrentUsername());
+		role.setUpdateTime(DateUtil.date());
+		
 		roleMapper.update(role);
 		
 		long roleId = role.getId();
@@ -65,6 +77,8 @@ public class RoleService {
 	}
 	
 	public void updateStatus(Role role) {
+		role.setUpdateBy(UserUtils.getCurrentUsername());
+		role.setUpdateTime(DateUtil.date());
 		roleMapper.update(role);
 	}
 

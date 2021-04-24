@@ -101,8 +101,12 @@
   			<if test="sex != null and sex != ''">
   				,sex = #{sex}
   			</if>
-  			,phone = #{phone}
-  			,email = #{email}
+  			<if test="phone != null and phone != ''">
+  				,phone = #{phone}
+  			</if>
+  			<if test="email != null and email != ''">
+  				,email = #{email}
+  			</if>
   			<if test="status != null and status != ''">
   				,status = #{status}
   			</if>

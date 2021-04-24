@@ -1,0 +1,189 @@
+html,body{
+	background-color: #fff;
+}
+.editormd-preview-container, .editormd-html-preview {
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0px !important;
+    overflow: auto;
+    width: auto;
+    background-color: #fff;
+}
+.editormd-preview-container pre.prettyprint, .editormd-html-preview pre.prettyprint {
+    overflow-x: scroll;
+    word-wrap: normal !important;
+    white-space: pre;
+}
+
+.markdown-body img {
+    max-width: 95% !important;
+}
+
+.view-h1-title{
+	color:#23241f;
+	margin-top:8px;
+	margin-bottom:24px;
+	font-size:24px;
+	line-height:32px;
+}
+
+
+
+.layui-header {
+    z-index: 1000;
+    height: 60px;
+    background-color: #393D49;
+    color: #fff;
+    /* background-image: linear-gradient(-90deg, #04C0C6 0%, #2BA3DE 51%, #04C0C6 100%); */
+}
+
+.fly-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 60px;
+    /* border-bottom: 1px solid #404553;
+    border-right: 1px solid #404553; */
+    border-radius: 0;
+}
+
+.content-padding-right{
+	padding-right: 50px;
+	border-right: 1px solid #dee2e6;
+}
+
+
+.myele {
+    box-shadow: 1px 1px 2px #ddd;
+}
+.myele:HOVER{
+    box-shadow: 2px 2px 4px #ddd;
+} 
+.layui-elem-field legend {
+    font-weight: 400;
+    color: #0C0C0C;
+}
+.layui-field-title {
+    margin: 10px 0px 0px;
+    width: 98%;
+}
+.layui-field-box {
+    font-size: 14px;
+    line-height: 26px;
+    color: #24292e;
+}
+.layui-field-box span{
+    font-size: 14px;
+}
+
+.layui-tab-content {
+    line-height: 26px;
+    border: none;
+    padding: 0px 10px;
+}
+hr {
+    margin: 10px 0;
+}
+
+.loading {
+    color: #009688;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+a:hover {
+    cursor: pointer;
+    /* color: #009688; */
+    color: #333;
+}
+
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+    background-color: #f2f2f2;
+}
+
+.layui-icon{
+	padding-right: 4px;
+}
+
+
+
+
+
+/* 下雨样式 start */
+.rain {
+    width: 100%;
+    height: 200px;
+    margin: 60px auto;
+    margin-bottom: -9px;
+    position: relative;
+}
+#canvas {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.rain img {
+    z-index: 10;
+    position: absolute;
+    right: 0;
+    width: 200px;
+}
+img {
+    border: none;
+    max-width: 80%;
+    /* border-radius: 8px; */
+}
+/* 下雨样式 end */
+
+
+
+/* 手机样式  start */
+@media screen and (max-width: 768px){
+	.layui-elem-field legend{
+		font-size: 16px;
+	}
+	.layui-field-box{
+	    font-size: 12px;
+	    line-height: 22px;
+	    color: #24292e;
+	}
+	body{
+	    font-size: 14px;
+	    line-height: 32px;
+	    color: #24292e;
+	}
+	.layui-nav .layui-nav-item a{
+		padding: 0px 14px;
+		font-size: 12px;
+	}
+	.layui-tab-content {
+	    line-height: 28px;
+	    padding: 0px 0px;
+	}
+	img {
+	    border: none;
+	    /* width: 100%; */
+	    /* border-radius: 8px; */
+	}
+	.content-padding-right{
+		padding-right: 8px;
+		border-right: 0px solid #dee2e6;
+	}
+	
+	.view-h1-title{
+		color:#23241f;
+		margin-top:8px;
+		margin-bottom:24px;
+		font-size:18px;
+		line-height:32px;
+	}
+	.markdown-body img {
+	    max-width: 95% !important;
+	}
+}
+/* 手机样式 end */

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.frank.core.log.annotation.SysLog;
+import com.frank.core.log.annotation.Log;
+import com.frank.core.log.enums.BusinessModule;
+import com.frank.core.log.enums.BusinessType;
 import com.frank.core.system.user.entity.User;
 import com.frank.core.system.user.service.UserService;
 import com.frank.framework.common.JsonResult;
@@ -31,7 +33,7 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@SysLog("查询用户列表")
+	@Log(description = "查询用户列表", businessModule = BusinessModule.USER, businessType = BusinessType.SELECT)
 	@RequestMapping("/list")
 	public JsonResult list(User user) {
 		PageHelper.startPage(user.getPage(), user.getLimit());
@@ -45,7 +47,7 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@SysLog("新增用户")
+	@Log(description = "新增用户", businessModule = BusinessModule.USER, businessType = BusinessType.INSERT)
 	@PreAuthorize("hasAuthority('sys:user:insert')")
 	@RequestMapping("/insert")
 	public JsonResult insert(@Validated @RequestBody User user) {
@@ -60,7 +62,7 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@SysLog("更新用户")
+	@Log(description = "更新用户", businessModule = BusinessModule.USER, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@RequestMapping("/update")
 	public JsonResult update(@Validated(value = Update.class) @RequestBody User user) {
@@ -69,11 +71,11 @@ public class UserController {
 	}
 	
 	/**
-	 * 新增用户状态
+	 * 	更新用户状态
 	 * @param user
 	 * @return
 	 */
-	@SysLog("新增用户状态")
+	@Log(description = "更新用户状态", businessModule = BusinessModule.USER, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:user:update')")
 	@RequestMapping("/updateStatus")
 	public JsonResult updateStatus(@Validated(value = Update.class) @RequestBody User user) {
@@ -86,7 +88,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@SysLog("删除用户")
+	@Log(description = "删除用户", businessModule = BusinessModule.USER, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:user:delete')")
 	@RequestMapping("/delete")
 	public JsonResult delete(@Validated @NotNull(message = "id不能为空") long id) {
@@ -99,7 +101,6 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@SysLog("根据id查询用户")
 	@RequestMapping("/selectById")
 	public JsonResult selectById(@Validated @NotNull(message = "id不能为空") long id) {
 		User user = userService.selectById(id);
@@ -111,7 +112,7 @@ public class UserController {
 	 * @param ids
 	 * @return
 	 */
-	@SysLog("批量删除用户")
+	@Log(description = "批量删除用户", businessModule = BusinessModule.USER, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:user:delete')")
 	@RequestMapping("/batchDelete")
 	public JsonResult batchDelete(@RequestBody List<Long> idList) {

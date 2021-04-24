@@ -10,8 +10,10 @@ import com.alibaba.fastjson.JSON;
 import com.frank.core.system.menu.entity.Menu;
 import com.frank.core.system.menu.entity.MenuTree;
 import com.frank.core.system.menu.mapper.MenuMapper;
+import com.frank.framework.util.UserUtils;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -32,10 +34,16 @@ public class MenuService {
 	}
 
 	public void insert(Menu menu) {
+		menu.setCreateBy(UserUtils.getCurrentUsername());
+		menu.setCreateTime(DateUtil.date());
+		menu.setUpdateBy(UserUtils.getCurrentUsername());
+		menu.setUpdateTime(DateUtil.date());
 		menuMapper.insert(menu);
 	}
 
 	public void update(Menu menu) {
+		menu.setUpdateBy(UserUtils.getCurrentUsername());
+		menu.setUpdateTime(DateUtil.date());
 		menuMapper.update(menu);
 	}
 

@@ -136,4 +136,23 @@ public class HomeController {
 		return "view/system/dept/edit";
 	}
 	
+	// ====== 操作日志模块相关 ======
+	/**
+	 * 	操作日志list.html页面
+	 * @return
+	 */
+	@RequestMapping("/operlog-list")
+	public String operlogList() {
+		return "view/system/operlog/list";
+	}
+	
+	/**
+	 * 	操作日志details.html页面
+	 * @return
+	 */
+	@RequestMapping("/operlog-details")
+	public String details() {
+		return "view/system/operlog/details";
+	}
+	
 }

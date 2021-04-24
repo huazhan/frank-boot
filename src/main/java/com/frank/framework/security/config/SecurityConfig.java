@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/component/**","/admin/**","/js/**","/css/**");
+		web.ignoring().antMatchers("/component/**","/admin/**","/common/**","/pear/**");
 	}
 	
 	// 认证用户的来源(内存或者数据库)

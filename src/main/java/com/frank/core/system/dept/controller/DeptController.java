@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.frank.core.log.annotation.Log;
+import com.frank.core.log.enums.BusinessModule;
+import com.frank.core.log.enums.BusinessType;
 import com.frank.core.system.dept.entity.Dept;
 import com.frank.core.system.dept.entity.DeptTree;
 import com.frank.core.system.dept.service.DeptService;
@@ -56,6 +59,7 @@ public class DeptController {
 	 * @param dept
 	 * @return
 	 */
+	@Log(description = "查询部门列表", businessModule = BusinessModule.DEPT, businessType = BusinessType.SELECT)
 	@RequestMapping("/list")
 	public JsonResult list(Dept dept) {
 		List<Dept> list = deptService.list(dept);
@@ -67,6 +71,7 @@ public class DeptController {
 	 * @param dept
 	 * @return
 	 */
+	@Log(description = "新增部门", businessModule = BusinessModule.DEPT, businessType = BusinessType.INSERT)
 	@PreAuthorize("hasAuthority('sys:dept:insert')")
 	@RequestMapping("/insert")
 	public JsonResult insert(@Validated @RequestBody Dept dept) {
@@ -79,6 +84,7 @@ public class DeptController {
 	 * @param dept
 	 * @return
 	 */
+	@Log(description = "更新部门", businessModule = BusinessModule.DEPT, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:dept:update')")
 	@RequestMapping("/update")
 	public JsonResult update(@Validated(value = Update.class) @RequestBody Dept dept) {
@@ -86,6 +92,12 @@ public class DeptController {
 		return JsonResult.success();
 	}
 	
+	/**
+	 * 	更新部门状态
+	 * @param dept
+	 * @return
+	 */
+	@Log(description = "更新部门状态", businessModule = BusinessModule.DEPT, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:dept:update')")
 	@RequestMapping("/updateStatusByParentId")
 	public JsonResult updateStatusByParentId(@Validated(value = Update.class) @RequestBody Dept dept) {
@@ -98,6 +110,7 @@ public class DeptController {
 	 * @param id
 	 * @return
 	 */
+	@Log(description = "删除部门", businessModule = BusinessModule.DEPT, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:dept:delete')")
 	@RequestMapping("/delete")
 	public JsonResult delete(@Validated @NotNull(message = "id不能为空") long id) {

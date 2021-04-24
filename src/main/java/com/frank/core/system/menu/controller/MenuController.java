@@ -13,11 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.frank.core.log.annotation.Log;
+import com.frank.core.log.enums.BusinessModule;
+import com.frank.core.log.enums.BusinessType;
 import com.frank.core.system.menu.entity.Menu;
 import com.frank.core.system.menu.entity.MenuTree;
 import com.frank.core.system.menu.service.MenuService;
 import com.frank.framework.common.JsonResult;
+import com.frank.framework.util.UserUtils;
 import com.frank.framework.valid.Update;
+
+import cn.hutool.core.date.DateUtil;
 
 /**
  * 菜单Controller
@@ -47,6 +53,7 @@ public class MenuController {
 	 * @param menu
 	 * @return
 	 */
+	@Log(description = "查询菜单列表", businessModule = BusinessModule.MENU, businessType = BusinessType.SELECT)
 	@RequestMapping("/list")
 	public JsonResult list(Menu menu) {
 		List<Menu> list = menuService.list(menu);
@@ -58,6 +65,7 @@ public class MenuController {
 	 * @param menu
 	 * @return
 	 */
+	@Log(description = "新增菜单", businessModule = BusinessModule.MENU, businessType = BusinessType.INSERT)
 	@PreAuthorize("hasAuthority('sys:menu:insert')")
 	@PostMapping("/insert")
 	public JsonResult insert(@Validated @RequestBody Menu menu) {
@@ -70,6 +78,7 @@ public class MenuController {
 	 * @param menu
 	 * @return
 	 */
+	@Log(description = "更新菜单", businessModule = BusinessModule.MENU, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:menu:update')")
 	@PostMapping("/update")
 	public JsonResult update(@Validated(value = Update.class) @RequestBody Menu menu) {
@@ -82,6 +91,7 @@ public class MenuController {
 	 * @param id
 	 * @return
 	 */
+	@Log(description = "根据id删除菜单", businessModule = BusinessModule.MENU, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:menu:delete')")
 	@PostMapping("/delete")
 	public JsonResult delete(@Validated @NotNull(message = "id不能为空") long id) {
@@ -94,6 +104,7 @@ public class MenuController {
 	 * @param idList
 	 * @return
 	 */
+	@Log(description = "批量删除菜单", businessModule = BusinessModule.MENU, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:menu:delete')")
 	@RequestMapping("/batchDelete")
 	public JsonResult batchDelete(@RequestBody List<Long> idList) {

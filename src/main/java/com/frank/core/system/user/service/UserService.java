@@ -10,8 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.frank.core.system.user.entity.User;
 import com.frank.core.system.user.entity.UserRole;
 import com.frank.core.system.user.mapper.UserMapper;
+import com.frank.framework.exception.BusinessException;
+import com.frank.framework.security.entity.MyUserDetails;
 import com.frank.framework.security.util.SecurityUtil;
+import com.frank.framework.util.UserUtils;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
 @Service
@@ -29,6 +33,16 @@ public class UserService {
 
 	@Transactional
 	public void insert(User user) {
+		
+		user.setCreateBy(UserUtils.getCurrentUsername());
+		user.setCreateTime(DateUtil.date());
+		user.setUpdateBy(UserUtils.getCurrentUsername());
+		user.setUpdateTime(DateUtil.date());
+		
+		MyUserDetails myUserDetails = userMapper.seleteByUserName(user.getUsername());
+		if (myUserDetails != null) {
+			throw new BusinessException("账号已存在");
+		}
 		
 		// 密码加密
 		String password = new BCryptPasswordEncoder().encode(user.getPassword());
@@ -48,6 +62,10 @@ public class UserService {
 
 	@Transactional
 	public void update(User user) {
+		
+		user.setUpdateBy(UserUtils.getCurrentUsername());
+		user.setUpdateTime(DateUtil.date());
+		
 		// 更新用户信息
 		userMapper.update(user);
 		
@@ -66,6 +84,8 @@ public class UserService {
 	
 	@Transactional
 	public void updateStatus(User user) {
+		user.setUpdateBy(UserUtils.getCurrentUsername());
+		user.setUpdateTime(DateUtil.date());
 		// 更新用户信息
 		userMapper.update(user);
 	}

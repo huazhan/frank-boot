@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>操作日志详情</title>
+    <link rel="stylesheet" th:href="@{~/component/pear/css/pear.css}" media="all">
+    <link rel="stylesheet" th:href="@{~/common/css/common.css}" media="all">
+    <style type="text/css">
+    	pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+		 .string { color: green; }
+		 .number { color: darkorange; }
+		 .boolean { color: blue; }
+		 .null { color: magenta; }
+		 .key { color: red; }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="">
+        <div class="main-container">
+            <div class="main-container">
+            	<input type="hidden" id="id" name="id" >
+                <div class="layui-form-item">
+                    <label class="layui-form-label">操作模块：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="module" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户信息：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="username" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">系统信息：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="os" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求接口：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="uri" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求方式：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="method" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">操作方法：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="clazz" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求参数：</label>
+                    <div class="layui-input-block">
+                        <pre id="params"></pre>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">返回结果：</label>
+                    <div class="layui-input-block">
+                        <pre id="jsonResult"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/common.js}" charset="utf-8"></script>
+<script>
+layui.use(['form','jquery','dtree'],function(){
+    let form = layui.form
+    	,dtree = layui.dtree;
+    let $ = layui.jquery;
+    
+    let id = getQueryString("id");
+    
+    
+    console.log('id',id);
+    
+    $.get("/operLog/selectById",{"id":id},function(result){
+    	console.log('result',result)
+    	if(result.code == 0){
+    		
+    		$("#module").val(result.data.moduleText+'  /  '+ result.data.typeText);
+    		$("#username").val(result.data.username+'  /  '+ result.data.ip +'  /  '+ result.data.address);
+    		$("#os").val(result.data.os+'  /  '+ result.data.browser);
+    		$("#uri").val(result.data.uri);
+    		$("#method").val(result.data.method);
+    		$("#clazz").val(result.data.clazz);
+    		$("#params").html(JsonFormat(result.data.params));
+    		$("#jsonResult").html(JsonFormat(result.data.jsonResult));
+    	}else{
+    		
+    	}
+    });
+    
+    
+    function JsonFormat(json) {
+    	console.log('$.isEmptyObject(json)',$.isEmptyObject(json));
+    	if(!$.isEmptyObject(json)){
+    		json = JSON.parse(json)
+    	}else{
+    		return '无';
+    	}
+    	
+    	
+    	if (typeof json != 'string') {
+    		json = JSON.stringify(json, undefined, 2);
+    	}
+   		json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+   		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+   			 var cls = 'number';
+   			 	if (/^"/.test(match)) {
+   			 			if (/:$/.test(match)) {
+   			 				cls = 'key';
+   			 			} else {
+   			 				cls = 'string';
+   			 			}
+   			 	} else if (/true|false/.test(match)) {
+   			 		cls = 'boolean';
+   			 	} else if (/null/.test(match)) {
+   			 		cls = 'null';
+   			 	}
+   			 	return '<span class="' + cls + '">' + match + '</span>';
+   		 });
+    }
+    
+    
+    
+})
+
+
+
+
+</script>
+</body>
+</html>

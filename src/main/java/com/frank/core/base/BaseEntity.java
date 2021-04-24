@@ -3,11 +3,8 @@ package com.frank.core.base;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.frank.framework.util.UserUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cn.hutool.core.date.DateUtil;
 
 /**
  * 公共Entity
@@ -25,14 +22,14 @@ public class BaseEntity implements Serializable{
 	private Integer limit;
 
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime = DateUtil.date();
+	private Date createTime;
 	
-	private String createBy = UserUtils.getCurrentUsername();
+	private String createBy;
 	
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime = DateUtil.date();
+	private Date updateTime;
 	
-	private String updateBy = UserUtils.getCurrentUsername();
+	private String updateBy;
 	
 	private String remark;
 	

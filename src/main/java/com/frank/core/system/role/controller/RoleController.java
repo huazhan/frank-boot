@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.frank.core.log.annotation.Log;
+import com.frank.core.log.enums.BusinessModule;
+import com.frank.core.log.enums.BusinessType;
 import com.frank.core.system.role.entity.Role;
 import com.frank.core.system.role.service.RoleService;
 import com.frank.framework.common.JsonResult;
@@ -46,6 +49,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@Log(description = "查询角色列表", businessModule = BusinessModule.ROLE, businessType = BusinessType.SELECT)
 	@RequestMapping("/list")
 	public JsonResult list(Role role) {
 		PageHelper.startPage(role.getPage(), role.getLimit());
@@ -59,6 +63,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@Log(description = "查询角色列表-不分页", businessModule = BusinessModule.ROLE, businessType = BusinessType.SELECT)
 	@RequestMapping("/selectList")
 	public JsonResult selectList(Role role) {
 		List<Role> list = roleService.list(role);
@@ -70,6 +75,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@Log(description = "新增角色", businessModule = BusinessModule.ROLE, businessType = BusinessType.INSERT)
 	@PreAuthorize("hasAuthority('sys:role:insert')")
 	@RequestMapping("/insert")
 	public JsonResult insert(@Validated @RequestBody Role role) {
@@ -82,6 +88,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@Log(description = "更新角色", businessModule = BusinessModule.ROLE, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@RequestMapping("/update")
 	public JsonResult update(@Validated(value = Update.class) @RequestBody Role role) {
@@ -94,6 +101,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
+	@Log(description = "更新角色状态", businessModule = BusinessModule.ROLE, businessType = BusinessType.UPDATE)
 	@PreAuthorize("hasAuthority('sys:role:update')")
 	@RequestMapping("/updateStatus")
 	public JsonResult updateStatus(@Validated(value = Update.class) @RequestBody Role role) {
@@ -106,6 +114,7 @@ public class RoleController {
 	 * @param id
 	 * @return
 	 */
+	@Log(description = "根据id删除角色", businessModule = BusinessModule.ROLE, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:role:delete')")
 	@RequestMapping("/delete")
 	public JsonResult delete(@Validated @NotNull(message = "id不能为空") long id) {
@@ -118,6 +127,7 @@ public class RoleController {
 	 * @param idList
 	 * @return
 	 */
+	@Log(description = "批量删除角色", businessModule = BusinessModule.ROLE, businessType = BusinessType.DELETE)
 	@PreAuthorize("hasAuthority('sys:role:delete')")
 	@RequestMapping("/batchDelete")
 	public JsonResult batchDelete(@RequestBody List<Long> idList) {
