@@ -29,12 +29,11 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint{
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		log.error(authException.getMessage(), authException);
-		
 		response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json;charset=utf-8");
-        JsonResult jsonResult = JsonResult.error("未登录，或者登录过期");
-        response.getWriter().println(JSONUtils.toJSONString(jsonResult));
-        response.getWriter().flush();
+		response.setContentType("application/json;charset=utf-8");
+		JsonResult jsonResult = JsonResult.error("未登录，或者登录过期");
+		response.getWriter().println(JSONUtils.toJSONString(jsonResult));
+		response.getWriter().flush();
 	}
 
 }

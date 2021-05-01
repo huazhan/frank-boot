@@ -1,10 +1,10 @@
 frank-boot:
   # 名称
-  name: frank-boot权限管理框架
+  name: Frank Boot权限管理框架
   # 当前版本
   version: v1.0.0
   # 版权信息
-  copyright: © 2020 www.chenhuazhan.com All Rights Reserved
+  copyright: © 2020-2021 frank.chenhuazhan.com All Rights Reserved
   # 文件上传路径
   filePath: 
       images: /images/

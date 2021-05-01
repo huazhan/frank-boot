@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>登录</title>
+<title>欢迎登录Frank Boot</title>
 <style>
 body{
 	background: #ebebeb;
@@ -116,6 +116,11 @@ a{
     <script src="../../common/js/jquery-1.11.2.min.js"></script> 
 <script type="text/javascript">
 $(function(){
+	
+	// 登录过期的时候，跳出ifram框架
+	if (top.location != self.location) {
+	    top.location = self.location
+	};
 	//得到焦点
 	$("#password").focus(function(){
 		$("#left_hand").animate({
@@ -158,7 +163,8 @@ function login(){
 	$.post("/login",{"username":userName,"password":password},function(res){
 		console.log('res',res);
 		if(res.code == 0){
-			$("#error").html("登录成功");
+			$("#success").html("登录成功");
+			$("#error").hide();
 			setTimeout(function(){
 				location.href = "/index";
 			},800);
@@ -192,10 +198,10 @@ function login(){
 			<span class="p_logo"></span>         
 			<input id="password" name="password" class="ipt"  type="password" placeholder="请输入密码" value="123456">   
 	  	</P>
-		<div style="height: 50px; line-height: 50px; margin-top: 30px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
-			<P style="margin: 0px 35px 20px 45px;">
-			<!-- <span style="float: left;">欢迎登录博客系统</span>  -->
-			<span><font color="red" id="error"></font></span>
+		<div style="height: 50px; line-height: 58px; margin-top: 30px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
+			<P style="margin: 0px 34px 20px 45px;">
+			<!-- <span style="float: left;">欢迎登录Frank Boot</span>  -->
+			<span style="font-weight: bold;font-size: 14px;"><font color="#5FB878" id="success"></font><font color="red" id="error"></font></span>
 	        <span style="float: right;"> 
 	              <!-- <input type="submit" style="background: rgb(0, 142, 173); padding: 7px 10px; border-radius: 4px; border: 1px solid rgb(26, 117, 152); border-image: none; color: rgb(255, 255, 255); font-weight: bold;" value="登录"/> --> 
 	              <button onclick="login()" style="background: #5FB878; padding: 7px 10px; border-radius: 4px; border: 1px solid #5FB878; border-image: none; color: rgb(255, 255, 255); font-weight: bold;">登&nbsp;&nbsp;录</button>

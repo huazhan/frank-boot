@@ -84,14 +84,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.sessionManagement()
 	        // 无效session跳转
-	        .invalidSessionUrl("/index")
+	        //.invalidSessionUrl("index")
 	        // 同一用户只能在一个地方登录，后面登的会把前面登的强行退出
-	        .maximumSessions(1)
+	        //.maximumSessions(1)
 	        // session过期跳转
-	        .expiredUrl("/index")
+	        //.expiredUrl("index")
 	        //.expiredSessionStrategy()
-	        .sessionRegistry(sessionRegistry)
-	        .and()
+	        //.sessionRegistry(sessionRegistry)
+	        //.and()
 	    .and()
 	     	.csrf().disable();
 		

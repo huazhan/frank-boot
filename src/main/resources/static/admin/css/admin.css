@@ -51,7 +51,8 @@
 }
 
 .pear-admin .layui-logo .logo {
-	display: none;
+	/* 注释掉logo就展示出来 */
+	/* display: none; */
 }
 
 .pear-admin .layui-side {

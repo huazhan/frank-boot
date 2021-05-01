@@ -1,7 +1,7 @@
 {
 	"logo": {
-		"title": "frank-boot",
-		"image": "admin/images/logo-fish.png"
+		"title": "Frank Boot",
+		"image": "admin/images/logo-jiandan.png"
 	},
 	"menu": {
 		"data": "/menu/selectMenuTree",

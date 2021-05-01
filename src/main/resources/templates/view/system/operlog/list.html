@@ -76,7 +76,7 @@
 <script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
 <script th:src="@{~/common/js/jquery-1.11.2.min.js}" charset="utf-8"></script>
 <script type="text/javascript">
-	
+
 layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 	var $ = layui.jquery
 	  ,form = layui.form
@@ -92,6 +92,10 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 	  ,toolbar:true
 	  ,defaultToolbar: ['filter']
 	  ,parseData: function(res){ //res 即为原始返回的数据
+		  	if(res.code != 0){
+	  			layer.msg(res.msg,{icon:2,time:2000});
+	  			return;
+	  		}
 		    return {
 		      "code": res.code, //解析接口状态
 		      "msg": res.msg, //解析提示文本

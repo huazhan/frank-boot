@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>Frank Admin</title>
-		<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
-  		 <link rel="bookmark" th:href="@{/favicon.ico}"/>
+		<title>Frank Boot</title>
+		<!-- 设置浏览器标题小图标 -->
+  		<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+  		<link rel="bookmark" th:href="@{/favicon.ico}"/>
 		<!-- 依 赖 样 式 -->
 		<link rel="stylesheet" th:href="@{~/component/pear/css/pear.css}"  media="all">
 		<!-- 加 载 样 式-->
@@ -34,7 +35,7 @@
 					<li class="layui-nav-item">
 						<!-- 头 像 -->
 						<a href="javascript:;">
-							<img src="admin/images/user-info.jpg" class="layui-nav-img">
+							<img src="admin/images/user-info.jpg" class="layui-nav-img" ><label sec:authentication="name"></label>
 						</a>
 						<!-- 功 能 菜 单 -->
 						<dl class="layui-nav-child">
@@ -84,6 +85,7 @@
 				admin.setConfigPath("config/pear.config.json");
 				// 进行框架初始化
 				admin.render();
+				
 			})
 		</script>
 	</body>
