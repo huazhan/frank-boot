@@ -46,7 +46,3 @@ xss:
   # 匹配链接
   urlPatterns: /user/*,/role/*,/menu/*,/dept/*
       
-logging:
-  level:
-     com.frank: debug  file:    path: /log
-    name: frank-boot.log
