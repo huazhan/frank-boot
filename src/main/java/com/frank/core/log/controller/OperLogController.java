@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frank.core.log.entity.OperLog;
@@ -29,6 +28,11 @@ public class OperLogController {
 	@Autowired
 	private OperLogService operLogService;
 
+	/**
+	 * 查询操作日志列表
+	 * @param operLog
+	 * @return
+	 */
 	@RequestMapping("/list")
 	public JsonResult list(OperLog operLog) {
 		PageHelper.startPage(operLog.getPage(), operLog.getLimit());
@@ -37,6 +41,11 @@ public class OperLogController {
 		return JsonResult.success(pageInfo);
 	}
 	
+	/**
+	 * 根据id查询操作日志
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/selectById")
 	public JsonResult selectById(@Validated @NotNull(message = "id不能为空") long id) {
 		OperLog operLog = operLogService.selectById(id);

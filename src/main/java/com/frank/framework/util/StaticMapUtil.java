@@ -2,6 +2,11 @@ package com.frank.framework.util;
 
 import java.util.HashMap;
 
+/**
+ * 静态Map工具类，用于翻译各种状态值方便前端显示
+ * @author Frank
+ *
+ */
 public class StaticMapUtil {
 
 	// 操作模块： 0-其他，1-用户管理，2-角色管理，3-菜单管理，4-部门管理
@@ -32,5 +37,12 @@ public class StaticMapUtil {
 	public final static HashMap<String, String> statusMap = new HashMap<String, String>() {{    
         put("0", "正常");
         put("1", "异常");
+    }}; 
+    
+    // 在线状态：0-在线，1-离线
+    @SuppressWarnings("serial")
+    public final static HashMap<String, String> onlineMap = new HashMap<String, String>() {{    
+    	put("0", "在线");
+    	put("1", "离线");
     }}; 
 }

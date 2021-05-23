@@ -17,7 +17,16 @@ public class HomeController {
 	 */
 	@RequestMapping(value={"","/","/index"})
 	public String index() {
-		return "index";
+		return "index"; // 跳转到 index.html
+	}
+	
+	/**
+	 * 	readme跳转
+	 * @return
+	 */
+	@RequestMapping("/readme")
+	public String readme() {
+		return "readme"; // 跳转到 readme.html
 	}
 	
 	// ====== 用户模块相关 ======
@@ -28,7 +37,7 @@ public class HomeController {
 	 */
 	@RequestMapping("/user-list")
 	public String userList() {
-		return "view/system/user/list";
+		return "view/system/user/list"; // 跳转到 view/system/user/路径下的 list.html
 	}
 	
 	/**
@@ -152,6 +161,16 @@ public class HomeController {
 	@RequestMapping("/operlog-details")
 	public String details() {
 		return "view/system/operlog/details";
+	}
+	
+	// ====== 操作日志模块相关 ======
+	/**
+	 * 	登录日志list.html页面
+	 * @return
+	 */
+	@RequestMapping("/loginlog-list")
+	public String loginlogList() {
+		return "view/system/loginlog/list";
 	}
 	
 }

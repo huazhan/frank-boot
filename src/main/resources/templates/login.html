@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -150,6 +150,11 @@ $(function(){
 });
 
 function login(){
+	
+	$("#login").attr("disabled",true);
+	$("#login").css({'background-color' : '#c2c2c2'});
+	$("#login").css({'border': '1px solid #c2c2c2'});
+	$("#login").html('登录中...');
 	var userName=$("#userName").val();
 	var password=$("#password").val();
 	if(userName==null||userName==""){
@@ -204,7 +209,7 @@ function login(){
 			<span style="font-weight: bold;font-size: 14px;"><font color="#5FB878" id="success"></font><font color="red" id="error"></font></span>
 	        <span style="float: right;"> 
 	              <!-- <input type="submit" style="background: rgb(0, 142, 173); padding: 7px 10px; border-radius: 4px; border: 1px solid rgb(26, 117, 152); border-image: none; color: rgb(255, 255, 255); font-weight: bold;" value="登录"/> --> 
-	              <button onclick="login()" style="background: #5FB878; padding: 7px 10px; border-radius: 4px; border: 1px solid #5FB878; border-image: none; color: rgb(255, 255, 255); font-weight: bold;">登&nbsp;&nbsp;录</button>
+	              <button id="login" onclick="login()" style="background: #5FB878; padding: 7px 10px; border-radius: 4px; border: 1px solid #5FB878; border-image: none; color: rgb(255, 255, 255); font-weight: bold;">登&nbsp;&nbsp;录</button>
 	         </span>         
 	         </P>
 	    </div>

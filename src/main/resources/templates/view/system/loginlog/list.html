@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>操作日志</title>
+<title>登录日志</title>
 <link rel="stylesheet" th:href="@{~/component/layui/css/layui.css}" media="all">
 <link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/dtree.css}" media="all">
 <link rel="stylesheet" th:href="@{~/component/pear/css/pear-module/dtree/font/dtreefont.css}" media="all">
@@ -20,34 +20,12 @@
 				<div class="layui-input-inline">
 				  <input type="text" name="ip"  autocomplete="off" placeholder="请输入ip" class="layui-input">
 				</div>
+				
 				<div class="layui-input-inline">
-				  <select name="module">
-			        <option value="">请选择操作模块</option>
-			        <option value="1">用户管理</option>
-			        <option value="2">角色管理</option>
-			        <option value="3">菜单管理</option>
-			        <option value="4">部门管理</option>
-			        <option value="0">其他</option>
-			      </select>
-				</div>
-				<div class="layui-input-inline">
-				  <select name="type">
-			        <option value="">请选择操作类型</option>
-			        <option value="1">查询</option>
-			        <option value="2">新增</option>
-			        <option value="3">更新</option>
-			        <option value="4">删除</option>
-			        <option value="5">导入</option>
-			        <option value="6">导出</option>
-			        <option value="7">授权</option>
-			        <option value="0">其他</option>
-			      </select>
-				</div>
-				<div class="layui-input-inline">
-				  <select name="status">
-			        <option value="">请选择操作状态</option>
-			        <option value="0">正常</option>
-			        <option value="1">异常</option>
+				  <select name="online">
+			        <option value="">请选择状态</option>
+			        <option value="0">在线</option>
+			        <option value="1">离线</option>
 			      </select>
 				</div>
 			
@@ -64,10 +42,10 @@
 	</div>
 
 <!-- 列表表格数据 -->
-<table class="my-table" id="operlog-table" lay-filter="operlog-table"></table>
+<table class="my-table" id="loginlog-table" lay-filter="loginlog-table"></table>
 
 <!-- 列表工具：编辑、删除 -->
-<script type="text/html" id="operlog-bar">
+<script type="text/html" id="loginlog-bar">
 	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="details" title="详情"><i class="layui-icon layui-icon-search">详情</i></button>
 
 </script>
@@ -87,8 +65,8 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 	
 	/* 表格渲染 */
 	table.render({
-	  elem: '#operlog-table' //指定原始表格元素选择器（推荐id选择器）
-	  ,url: '/operLog/list'
+	  elem: '#loginlog-table' //指定原始表格元素选择器（推荐id选择器）
+	  ,url: '/loginlog/list'
 	  ,toolbar:true
 	  ,defaultToolbar: ['filter']
 	  ,parseData: function(res){ //res 即为原始返回的数据
@@ -112,28 +90,24 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 		    ,{field: 'username', title: '用户账号', align: 'center'}
 		    ,{field: 'ip', title: '操作人ip', align: 'center'}
 		    ,{field: 'address', title: '操作地点', align: 'center'}
-		    ,{field: 'uri', title: '请求接口', align: 'center'}
-		    ,{field: 'method', title: '请求方式', align: 'center'}
 		    ,{field: 'os', title: '系统', align: 'center'}
 		    ,{field: 'browser', title: '浏览器', align: 'center'}
-		    ,{field: 'moduleText', title: '操作模块', align: 'center'}
-		    ,{field: 'typeText', title: '操作类型', align: 'center'}
-		    ,{field: 'statusText', title: '操作状态', align: 'center', templet: '#titleTpl'}
-		    ,{field: 'createTime', title: '创建时间', align: 'center',width:180}
-		    ,{toolbar: '#operlog-bar', title: '操作', minWidth: 100,  align: 'left',}
+		    ,{field: 'onlineText', title: '状态',  align: 'center',templet: '#titleTpl'}
+		    ,{field: 'createTime', title: '创建时间', align: 'left',width:200}
+		    //,{toolbar: '#loginlog-bar', title: '操作', minWidth: 100,  align: 'left',}
 	  ]] 
 	  
 	});
 	
 	/* 工具条上的事件 */
-	table.on('toolbar(operlog-table)', function(obj) {
+	table.on('toolbar(loginlog-table)', function(obj) {
 		if (obj.event === 'refresh') {
 			window.refresh();
 		}
 	});
 	
 	/* 列表中的工具上的按钮事件 */
-	table.on('tool(operlog-table)', function(obj) {
+	table.on('tool(loginlog-table)', function(obj) {
 		if (obj.event === 'details') {
 			window.details(obj);
 		}
@@ -141,7 +115,7 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 	
 	/* 点击查询按钮 */
 	form.on('submit(search)', function(data) {
-		table.reload('operlog-table', {
+		table.reload('loginlog-table', {
 			where: data.field
 		})
 		return false;
@@ -149,7 +123,7 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 		
 	/* 刷新table */
     window.refresh = function(param) {
-		table.reload('operlog-table');
+		table.reload('loginlog-table');
 	}
 	
     /* 点击编辑，弹出编辑页面 */
@@ -159,7 +133,7 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 			title: '操作日志详情',
 			shade: 0.1,
 			area: ['94%', '96%'],
-			content: '/operlog-details?id='+obj.data.id
+			content: '/loginlog-details?id='+obj.data.id
 		}); 
     	
 	}
@@ -169,10 +143,10 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
 </script>
 
 <script type="text/html" id="titleTpl">
-  {{#  if(d.status == 0){ }}
-    <div style="color: #fff;background-color: #5FB878;width: 66px;border-radius: 16px;">{{d.statusText}}</div>
+  {{#  if(d.online == 0){ }}
+    <div style="color: #fff;background-color: #5FB878;width: 66px;border-radius: 16px;">{{d.onlineText}}</div>
   {{#  } else { }}
-	<div style="color: #fff;background-color: #FF5722;width: 66px;border-radius: 16px;">{{d.statusText}}</div>
+	<div style="color: #fff;background-color: #FF5722;width: 66px;border-radius: 16px;">{{d.onlineText}}</div>
   {{#  } }}
 </script>
 
