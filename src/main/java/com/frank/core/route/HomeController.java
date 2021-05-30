@@ -163,7 +163,7 @@ public class HomeController {
 		return "view/system/operlog/details";
 	}
 	
-	// ====== 操作日志模块相关 ======
+	// ====== 登录日志模块相关 ======
 	/**
 	 * 	登录日志list.html页面
 	 * @return
@@ -171,6 +171,16 @@ public class HomeController {
 	@RequestMapping("/loginlog-list")
 	public String loginlogList() {
 		return "view/system/loginlog/list";
+	}
+	
+	// ====== 监控管理模块相关 ======
+	/**
+	 * 	系统信息list.html页面
+	 * @return
+	 */
+	@RequestMapping("/monitor-server")
+	public String serverInfo() {
+		return "view/system/monitor/server";
 	}
 	
 }

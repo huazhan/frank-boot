@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>服务监控</title>
+<link rel="stylesheet" th:href="@{~/component/layui/css/layui.css}" media="all">
+<style type="text/css">
+	.infoDiv{
+		margin: 8px 4px 0px 4px;
+	    padding: 16px;
+	    background-color: #fff;
+	    border-radius: 8px;
+	    box-shadow: rgb(0 0 0 / 20%) 0px 0px 4px;
+	}
+</style>
+</head>
+<body>
+
+	<div class="layui-fluid" style="padding-top: 8px;padding-bottom:16px; background-color: #f4f4f4;">
+		<div class="layui-row layui-col-space10" >
+			<div class="layui-col-md6">
+				<div class="infoDiv">
+					 <h3 style="color: #666;">CPU信息</h3>
+					 <hr>
+			         <table class="layui-table">
+						  <thead>
+						    <tr>
+						      <th>属性</th>
+						      <th>值</th>
+						    </tr> 
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <td>型号</td>
+						      <td><span id="cpu-cpuModel"></span></td>
+						    </tr>
+						    <tr>
+						      <td>核心数</td>
+						      <td><span id="cpu-cpuNum"></span>核<span id="cpu-processNum"></span>线程</td>
+						    </tr>
+						    <tr>
+						      <td>用户使用率</td>
+						      <td><span id="cpu-used"></span>%</td>
+						    </tr>
+						    <tr>
+						      <td>系统使用率</td>
+						      <td><span id="cpu-sys"></span>%</td>
+						    </tr>
+						    <tr>
+						      <td>当前空闲率</td>
+						      <td><span id="cpu-free"></span>%</td>
+						    </tr>
+						  </tbody>
+					</table>
+				</div>
+		    </div>
+		    
+			<div class="layui-col-md6">
+				<div class="infoDiv">
+					 <h3 style="color: #666;">内存信息</h3>
+					 <hr>
+			         <table class="layui-table">
+						  <thead>
+						    <tr>
+						      <th>属性</th>
+						      <th>内存</th>
+						      <th>JVM</th>
+						    </tr> 
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <td>总内存</td>
+						      <td><span id="mem-total"></span>G</td>
+						      <td><span id="jvm-total"></span>M</td>
+						    </tr>
+						    <tr>
+						      <td>已用内存</td>
+						      <td><span id="mem-used"></span>G</td>
+						      <td><span id="jvm-used"></span>M</td>
+						    </tr>
+						    <tr>
+						      <td>剩余内存</td>
+						      <td><span id="mem-free"></span>G</td>
+						      <td><span id="jvm-free"></span>M</td>
+						    </tr>
+						    <tr>
+						      <td>使用率</td>
+						      <td><span id="mem-usage"></span>%</td>
+						      <td><span id="jvm-usage"></span>%</td>
+						    </tr>
+						    <tr>
+						      <td>空闲率</td>
+						      <td><span id="mem-free-rate"></span>%</td>
+						      <td><span id="jvm-free-rate"></span>%</td>
+						    </tr>
+						  </tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
+		
+		
+		<!-- JVM信息 -->
+		<div class="layui-row layui-col-space10" >
+			<div class="layui-col-md12">
+				<div class="infoDiv">
+					 <h3 style="color: #666;">JAVA虚拟机信息</h3>
+					 <hr>
+			         <table class="layui-table">
+						  <tbody>
+						    <tr>
+						      <td style="background-color:#f2f2f2;">JVM名称</td>
+						      <td><span id="jvm-name"></span></td>
+						      <td style="background-color:#f2f2f2;">JDK版本</td>
+						      <td><span id="jvm-version"></span></td>
+						    </tr>
+						    <tr>
+						      <td style="background-color:#f2f2f2;">启动时间</td>
+						      <td><span id="jvm-startTime"></span></td>
+						      <td style="background-color:#f2f2f2;">运行时长</td>
+						      <td><span id="jvm-runTime"></span></td>
+						    </tr>
+						    <tr >
+						      <td style="background-color:#f2f2f2;">安装路径</td>
+						      <td colspan="3"><span id="jvm-home"></span></td>
+						    </tr>
+						    <tr>
+						      <td style="background-color:#f2f2f2;">项目路径</td>
+						      <td colspan="3"><span id="sys-userDir"></span></td>
+						    </tr>
+						  </tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
+		
+		<!-- 服务器信息 -->
+		<div class="layui-row layui-col-space10" >
+			<div class="layui-col-md12">
+				<div class="infoDiv">
+					 <h3 style="color: #666;">服务器信息</h3>
+					 <hr>
+			         <table class="layui-table">
+						  <tbody>
+						    <tr>
+						      <td style="background-color:#f2f2f2;">服务器名称</td>
+						      <td><span id="sys-computerName"></span></td>
+						      <td style="background-color:#f2f2f2;">操作系统</td>
+						      <td><span id="sys-osName"></span></td>
+						    </tr>
+						    <tr>
+						      <td style="background-color:#f2f2f2;">服务器ip</td>
+						      <td><span id="sys-computerIp"></span></td>
+						      <td style="background-color:#f2f2f2;">系统架构</td>
+						      <td><span id="sys-osArch"></span></td>
+						    </tr>
+						  </tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
+		
+		
+		<!-- 硬盘信息 -->
+		<div class="layui-row layui-col-space10" >
+			<div class="layui-col-md12">
+				<div class="infoDiv">
+					 <h3 style="color: #666;">硬盘信息</h3>
+					 <hr>
+			         <table class="layui-table">
+						  <thead>
+						    <tr>
+						      <th>盘符路径</th>
+						      <th>文件类型</th>
+						      <th>盘符类型</th>
+						      <th>总大小</th>
+						      <th>可用大小</th>
+						      <th>已用大小</th>
+						      <th>已用率</th>
+						    </tr> 
+						  </thead>
+						  <tbody id="hardDiskTbody">
+						    <!-- <tr>
+						      <td><span id="">1</span></td>
+						      <td><span id="">2</span></td>
+						      <td><span id="">3</span></td>
+						      <td><span id="">4</span></td>
+						      <td><span id="">5</span></td>
+						      <td><span id="">6</span></td>
+						      <td><span id="">7</span></td>
+						    </tr> -->
+						  </tbody>
+					</table>
+				</div>
+		    </div>
+		</div>
+		
+		
+		
+	</div>
+<script th:src="@{~/component/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
+<script th:src="@{~/common/js/jquery-1.11.2.min.js}" charset="utf-8"></script>
+<script>
+layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
+  var form = layui.form;
+  
+  console.log(converNum(2));
+  
+  var url = "/server/getServer";
+  $.post(url, {}, function(result){
+	  console.log('result:',result);
+	  if(result.code == 0){
+		  var data = result.data;
+		  var cpu = data.cpu;
+		  var mem = data.mem;
+		  var jvm = data.jvm;
+		  var sys = data.sys;
+		  var hardDisk = data.hardDisk;
+		  
+		  // 赋值cpu
+		  $("#cpu-cpuModel").html(cpu.cpuModel);
+		  $("#cpu-cpuNum").html(converNum(cpu.cpuNum));
+		  $("#cpu-processNum").html(converNum(cpu.processNum));
+		  $("#cpu-used").html(cpu.used);
+		  $("#cpu-sys").html(cpu.sys);
+		  $("#cpu-free").html(cpu.free);
+		  
+		  // 赋值内存
+		  $("#mem-total").html(mem.total);
+		  $("#mem-used").html(mem.used);
+		  $("#mem-free").html(mem.free);
+		  $("#mem-usage").html(mem.usage);
+		  $("#mem-free-rate").html(mem.freeRate);
+		  
+		  // 赋值JVM
+		  $("#jvm-total").html(jvm.total);
+		  $("#jvm-used").html(jvm.used);
+		  $("#jvm-free").html(jvm.free);
+		  $("#jvm-usage").html(jvm.usage);
+		  $("#jvm-free-rate").html(jvm.freeRate);
+		  
+		  $("#jvm-name").html(jvm.name);
+		  $("#jvm-version").html(jvm.version);
+		  $("#jvm-startTime").html(jvm.startTime);
+		  $("#jvm-runTime").html(jvm.runTime);
+		  $("#jvm-home").html(jvm.home);
+		  
+		  // 赋值服务器
+		  $("#sys-computerName").html(sys.computerName);
+		  $("#sys-osName").html(sys.osName);
+		  $("#sys-computerIp").html(sys.computerIp);
+		  $("#sys-osArch").html(sys.osArch);
+		  $("#sys-userDir").html(sys.userDir);
+		  
+		  // 赋值硬盘
+		  $.each(hardDisk,function(index,value){
+			  var hardDiskTableTr = '<tr>'+
+								      '<td>'+value.dirName+'</td>'+
+								      '<td>'+value.sysTypeName+'</td>'+
+								      '<td>'+value.typeName+'</td>'+
+								      '<td>'+value.total+'</td>'+
+								      '<td>'+value.free+'</td>'+
+								      '<td>'+value.used+'</td>'+
+								      '<td>'+value.usage+'%</td>'+
+								    '</tr>';
+			  
+			  $("#hardDiskTbody").append(hardDiskTableTr);    
+		  });
+		  
+	  }
+  });
+  
+  //各种基于事件的操作，下面会有进一步介绍
+});
+
+function converNum(num){
+	if(num == 1){
+		return '单';
+	}else if(num == 2){
+		return '双'
+	}else if(num == 3){
+		return '三'
+	}else if(num == 4){
+		return '四'
+	}else if(num == 5){
+		return '五'
+	}else if(num == 6){
+		return '六'
+	}else if(num == 7){
+		return '七'
+	}else if(num == 8){
+		return '八'
+	}else if(num == 9){
+		return '九'
+	}else if(num == 10){
+		return '十'
+	}
+}
+
+</script>
+	
+</body>
+</html>
