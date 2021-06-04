@@ -41,8 +41,7 @@
 4.  启动项目，在浏览器中输 http://localhost:8089/ 即可访问系统
 
 #### 系统截图
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114200_461c1d0b_7897827.png "微信截图_20210604113916.png")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114217_3c7d8377_7897827.png "微信截图_20210604113951.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114200_461c1d0b_7897827.png "微信截图_20210604113916.png")![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114217_3c7d8377_7897827.png "微信截图_20210604113951.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114235_8fcfe93a_7897827.png "微信截图_20210604114002.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114244_e9d38b2c_7897827.png "微信截图_20210604114020.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114257_430626be_7897827.png "微信截图_20210604114027.png")
