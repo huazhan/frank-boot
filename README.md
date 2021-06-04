@@ -22,10 +22,10 @@
 - SpringBoot2.4.1
 - SpringSecurity
 - MyBatis
-- MySql
+- MySql5.6
 - Druid
 - 前端  Layui
-- 前端基于layui的   pear admin layui
+- 前端基于layui的 pear admin layui
 - ...
 
 ##### 项目中初始用户和密码：
