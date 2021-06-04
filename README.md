@@ -1,4 +1,4 @@
-# frank-boot
+## Frank Boot 权限管理系统
 
 ### 系统演示地址：[http://frank.chenhuazhan.com/](http://frank.chenhuazhan.com/)
 
