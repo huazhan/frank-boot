@@ -1,13 +1,13 @@
 # frank-boot
 
+### 系统演示地址：[http://frank.chenhuazhan.com/](http://frank.chenhuazhan.com/)
+
 #### 介绍
 ##### 前言：
 这是一款基于SpringBoot+SpringSecurity+Mybatis的RBAC权限管理系统,目前只做了简单的权限功能，经简单测试功能基本正常。
 
 ##### 说明：
 本项目目前只适合作为一个学习项目，暂不建议用于实际开发，未经过系统全面测试，肯定存在着不少的bug，欢迎一起学习交流，star一波
-
-#### 演示地址：[http://frank.chenhuazhan.com/](http://frank.chenhuazhan.com/)
 
 ##### 系统功能：
 - 用户管理：提供系统用户配置及角色关联
