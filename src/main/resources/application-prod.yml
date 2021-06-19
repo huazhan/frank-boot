@@ -4,7 +4,7 @@ frank-boot:
   # 当前版本
   version: v1.0.0
   # 版权信息
-  copyright: © 2020 www.chenhuazhan.com All Rights Reserved
+  copyright: © 2020-2021 frank.chenhuazhan.com All Rights Reserved
   # 文件上传路径
   filePath: 
       images: /images/
@@ -32,4 +32,4 @@ spring:
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   thymeleaf:
      # thymeleaf页面缓存，开发时设为false,上线时设置true
-     cache: false
+     cache: true
