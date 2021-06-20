@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -39,13 +39,13 @@
 			
 				<div style="margin-top: 16px;">
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search" id="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+						<button sec:authorize="hasAuthority('sys:menu:select')" type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search" id="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
 					</div>
 					<div class="layui-inline">
-						<button type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+						<button sec:authorize="hasAuthority('sys:menu:select')" type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
 					</div>
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
+						<button sec:authorize="hasAuthority('sys:menu:insert')" type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
 					</div>
 					<!-- <div class="layui-inline">
 						<button type="button" class="pear-btn pear-btn-danger" id="batchDelete" ><i class="layui-icon layui-icon-delete"></i> 批量删除 </button>
@@ -72,14 +72,18 @@
 
 <!-- 列表工具：编辑、删除 -->
 <script type="text/html" id="dept-bar" >
-	<button {{d.type == '3' ? 'style="visibility: hidden"' : ''}}  class="pear-btn pear-btn-success pear-btn-sm" lay-event="add" title="新增子菜单"><i class="layui-icon layui-icon-add-1"></i></button>
-	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
-	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
+	<button sec:authorize="hasAuthority('sys:menu:insert')" {{d.type == '3' ? 'style="visibility: hidden"' : ''}}  class="pear-btn pear-btn-success pear-btn-sm" lay-event="add" title="新增子菜单"><i class="layui-icon layui-icon-add-1"></i></button>
+	<button sec:authorize="hasAuthority('sys:menu:update')" class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
+	<button sec:authorize="hasAuthority('sys:menu:delete')" class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
 </script>
 
 <!-- 列表状态：0-隐藏，1-显示-->
 <script type="text/html" id="menu-status">
-	<input type="checkbox" id="{{d.id}}" name={{d.parentId}} value="{{d.status}}" lay-skin="switch" lay-text="显示|隐藏"   lay-filter="menu-status"  {{ d.status == 1 ? 'checked' : '' }}>
+	{{#  if(d.type != 3){ }}
+		<input type="checkbox" id="{{d.id}}" name="{{d.parentId}}" value="{{d.status}}" lay-skin="switch"   lay-text="显示|隐藏"   lay-filter="menu-status"  {{ d.status == 1 ? "checked" : "" }} ></input>
+	{{#  } else { }}
+
+	{{#  } }}
 </script>
 
 <!-- 菜单类型转义：1-目录，2-菜单，3-按钮 -->
@@ -133,8 +137,8 @@ layui.use(['form', 'layedit', 'laydate','element','table','dtree','treetable'], 
 			    ,{field: 'name', title: '菜单名称', align: 'center',style:'text-align:left' }
 			    ,{field: 'url', title: '请求地址', align: 'center',width:220}
 			    ,{field: 'type', title: '菜单类型', align: 'center',width:120, templet: '#menu-type'}
-			    ,{field: 'perms', title: '权限标识', align: 'center',width:160}
 			    ,{field: 'status', title: '菜单状态', align: 'center' ,width:100, templet: '#menu-status'}
+			    ,{field: 'perms', title: '权限标识', align: 'center',width:160}
 			    ,{field: 'sort', title: '排序', align: 'center',width:80,}
 			    ,{field: 'createTime', title: '创建时间', align: 'center',width:180}
 			    ,{toolbar: '#dept-bar', title: '操作', width: 220,  align: 'center'}

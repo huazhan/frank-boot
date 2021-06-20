@@ -46,16 +46,16 @@
 			
 				<div style="margin-top: 16px;">
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+						<button sec:authorize="hasAuthority('sys:user:select')" type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
 					</div>
 					<div class="layui-inline">
-						<button type="button" onclick="window.formReset(searchForm)" class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+						<button sec:authorize="hasAuthority('sys:user:select')" type="button" onclick="window.formReset(searchForm)" class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
 					</div>
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
+						<button sec:authorize="hasAuthority('sys:user:insert')" type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
 					</div>
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-danger" id="batchDelete" ><i class="layui-icon layui-icon-delete"></i> 批量删除 </button>
+						<button sec:authorize="hasAuthority('sys:user:delete')"  type="button" class="pear-btn pear-btn-danger" id="batchDelete" ><i class="layui-icon layui-icon-delete"></i> 批量删除 </button>
 					</div>
 				</div>
 			</form>
@@ -67,8 +67,8 @@
 
 <!-- 列表工具：编辑、删除 -->
 <script type="text/html" id="user-bar">
-	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
-	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
+	<button sec:authorize="hasAuthority('sys:user:update')" class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
+	<button sec:authorize="hasAuthority('sys:user:delete')" class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
 </script>
 
 <!-- 列表性别转义：0-女，1-男 -->

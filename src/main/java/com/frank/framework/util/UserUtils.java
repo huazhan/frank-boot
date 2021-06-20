@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserUtils {
 
 	/**
-	 * 	获取用户登录名
+	 * 	获取用户登录名,如:admin
 	 * @return
 	 */
 	public static String getCurrentUsername() {

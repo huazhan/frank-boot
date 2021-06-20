@@ -56,9 +56,11 @@ public class MenuService {
 	}
 
 	public List<MenuTree> selectMenuTree() {
-//		List<Menu> list = menuMapper.list(null);
+
+		String currentUsername = UserUtils.getCurrentUsername();
+
 		List<MenuTree> result = new ArrayList<>();
-		List<MenuTree> list = menuMapper.selectMenuTree();
+		List<MenuTree> list = menuMapper.selectMenuTree(currentUsername);
 		
 		for (MenuTree adModule : list) {
             // 根节点

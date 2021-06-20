@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -34,10 +34,10 @@
 			
 				<div style="margin-top: 16px;">
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search" id="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+						<button sec:authorize="hasAuthority('sys:dept:select')" type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search" id="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
 					</div>
 					<div class="layui-inline">
-						<button type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+						<button sec:authorize="hasAuthority('sys:dept:select')" type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
 					</div>
 					<!-- <div class="layui-inline">
 						<button type="button" class="pear-btn pear-btn-primary" id="add"><i class="layui-icon layui-icon-addition"></i> 新增 </button>
@@ -67,9 +67,9 @@
 
 <!-- 列表工具：编辑、删除 -->
 <script type="text/html" id="dept-bar">
-	<button class="pear-btn pear-btn-success pear-btn-sm" lay-event="add" title="新增子部门"><i class="layui-icon layui-icon-add-1"></i></button>
-	<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
-	<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
+	<button sec:authorize="hasAuthority('sys:dept:insert')" class="pear-btn pear-btn-success pear-btn-sm" lay-event="add" title="新增子部门"><i class="layui-icon layui-icon-add-1"></i></button>
+	<button sec:authorize="hasAuthority('sys:dept:update')" class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit" title="编辑"><i class="layui-icon layui-icon-edit"></i></button>
+	<button sec:authorize="hasAuthority('sys:dept:delete')" class="pear-btn pear-btn-danger pear-btn-sm" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
 </script>
 
 <!-- 列表状态开关：0-禁用，1-正常 -->

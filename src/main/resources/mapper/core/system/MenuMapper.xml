@@ -113,24 +113,24 @@
   </delete>  
   
   <select id="selectMenuTree" resultType="com.frank.core.system.menu.entity.MenuTree">
-  		select 
-  		*,
-  		a.name as "title",
-  		a.url as "href"
-  		from sys_menu a
-  		<where>
-  			<if test="name != null and name != ''">
-  				and a.name like concat('%',#{name},'%')
-  			</if>
-  			<if test="type != null and type != ''">
-  				and a.type = #{type}
-  			</if>
-  			<if test="perms != null and perms != ''">
-  				and a.perms like concat('%',#{perms},'%')
-  			</if>
-  				and a.status = '1'
-  		</where>
-  		order by a.sort, a.create_time
+	  SELECT
+		  c.*,
+		  c.name as "title",
+		  c.url as "href"
+	  FROM
+		  sys_user a,
+		  sys_role b,
+		  sys_menu c,
+		  sys_user_role d,
+		  sys_role_menu e
+	  WHERE a.id = d.user_id
+		AND b.id = d.role_id
+		AND b.id = e.role_id
+		AND c.id = e.menu_id
+		AND a.username = #{currentUsername}
+		AND c.type in ( '1', '2')
+		AND c.status = '1'
+	  ORDER BY c.sort, c.create_time
   </select>
   
 </mapper>

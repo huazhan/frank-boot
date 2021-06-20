@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.frank.core.system.menu.entity.Menu;
 import com.frank.core.system.menu.entity.MenuTree;
+import org.apache.ibatis.annotations.Param;
 
 public interface MenuMapper {
 
@@ -19,6 +20,6 @@ public interface MenuMapper {
 
 	void batchDelete(List<Long> idList);
 
-	List<MenuTree> selectMenuTree();
+	List<MenuTree> selectMenuTree(@Param("currentUsername") String currentUsername);
 
 }

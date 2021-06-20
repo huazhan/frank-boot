@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -53,10 +53,10 @@
 			
 				<div style="margin-top: 16px;">
 					<div class="layui-inline">
-						<button type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
+						<button sec:authorize="hasAuthority('log:oper:select')" type="button" class="pear-btn pear-btn-success" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i> 查询</button>
 					</div>
 					<div class="layui-inline">
-						<button type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
+						<button sec:authorize="hasAuthority('log:oper:select')" type="reset"  class="pear-btn pear-btn-warming" ><i class="layui-icon layui-icon-refresh"></i> 重置</button>
 					</div>
 				</div>
 			</form>

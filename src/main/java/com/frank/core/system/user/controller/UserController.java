@@ -34,6 +34,7 @@ public class UserController {
 	 * @return
 	 */
 	@Log(description = "查询用户列表", businessModule = BusinessModule.USER, businessType = BusinessType.SELECT)
+	@PreAuthorize("hasAuthority('sys:user:select')")
 	@RequestMapping("/list")
 	public JsonResult list(User user) {
 		PageHelper.startPage(user.getPage(), user.getLimit());

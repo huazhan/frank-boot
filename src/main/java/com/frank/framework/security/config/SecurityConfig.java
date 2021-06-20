@@ -13,7 +13,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.frank.framework.security.handler.JsonAccessDeniedHandler;
 import com.frank.framework.security.handler.JsonAuthenticationEntryPoint;
 import com.frank.framework.security.handler.JsonAuthenticationFailureHandler;
 import com.frank.framework.security.handler.JsonAuthenticationSuccessHandler;
@@ -30,9 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private JsonAccessDeniedHandler jsonAccessDeniedHandler;
 	
 	@Autowired
 	private JsonAuthenticationEntryPoint jsonAuthenticationEntryPoint;
@@ -97,7 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
         // 未登陆时返回 JSON 格式的数据给前端
         http.httpBasic().authenticationEntryPoint(jsonAuthenticationEntryPoint);
-        // 无权访问时返回JSON格式的数据
-        http.exceptionHandling().accessDeniedHandler(jsonAccessDeniedHandler);
+
 	}
 }
