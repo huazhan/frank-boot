@@ -11,6 +11,8 @@ public class RoleAndPerms {
 	
 	private String perms; // 权限标识
 
+	private String menuName; // 菜单名称
+
 	public String getRoleKey() {
 		return roleKey;
 	}
@@ -26,6 +28,12 @@ public class RoleAndPerms {
 	public void setPerms(String perms) {
 		this.perms = perms;
 	}
-	
-	
+
+	public String getMenuName() {
+		return menuName;
+	}
+
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
 }

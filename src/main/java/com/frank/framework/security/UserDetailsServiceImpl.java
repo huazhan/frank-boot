@@ -63,9 +63,15 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			for (String roleKey : roleKeySet) {
 				authorities.add(new SimpleGrantedAuthority("ROLE_"+roleKey));
 			}
-			
+
+			Set<String> menuNameSet = roleAndPermsList.stream().map(RoleAndPerms::getMenuName).filter(menuName -> StringUtils.isNotBlank(menuName)).collect(Collectors.toSet());
+			if(CollUtil.isEmpty(menuNameSet)){
+				throw new BusinessException("该账号拥有的角色未被赋予任何权限");
+			}
+
 			// 拥有的权限。使用方式如：在controller相应方法中加上注解：@PreAuthorize("hasAuthority('sys:user:delete')")
 			Set<String> permsSet = roleAndPermsList.stream().map(RoleAndPerms::getPerms).filter(perms -> StringUtils.isNotBlank(perms)).collect(Collectors.toSet());
+
 			String permsString = StringUtils.join(permsSet, ",");
 			List<GrantedAuthority> commaSeparatedStringToAuthorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(permsString);
 			authorities.addAll(commaSeparatedStringToAuthorityList);
@@ -73,6 +79,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			log.info("用户【"+username+"】拥有的角色："+JSON.toJSONString(roleKeySet));
 			log.info("用户【"+username+"】拥有的权限："+JSON.toJSONString(permsSet));
 			
+		}else{
+			throw new BusinessException("该账号未被赋予任何角色");
 		}
 		
 		//String password = new BCryptPasswordEncoder().encode("123456");

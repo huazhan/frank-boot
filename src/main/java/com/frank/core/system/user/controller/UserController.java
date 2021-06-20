@@ -110,7 +110,7 @@ public class UserController {
 	
 	/**
 	 *	 批量删除
-	 * @param ids
+	 * @param idList
 	 * @return
 	 */
 	@Log(description = "批量删除用户", businessModule = BusinessModule.USER, businessType = BusinessType.DELETE)

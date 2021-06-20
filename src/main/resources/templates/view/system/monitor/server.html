@@ -203,15 +203,18 @@
 <script th:src="@{~/component/pear/pear.js}" charset="utf-8"></script>
 <script th:src="@{~/common/js/jquery-1.11.2.min.js}" charset="utf-8"></script>
 <script>
-layui.use(['form', 'layedit', 'laydate','element','table','dtree'], function(){
+layui.use(['form','layer'], function(){
   var form = layui.form;
-  
-  console.log(converNum(2));
+  var layer = layui.layer;
+
+  //var index = layer.load();
   
   var url = "/server/getServer";
   $.post(url, {}, function(result){
-	  console.log('result:',result);
+
 	  if(result.code == 0){
+		 // layer.close(index);
+
 		  var data = result.data;
 		  var cpu = data.cpu;
 		  var mem = data.mem;

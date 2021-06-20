@@ -160,12 +160,13 @@
   <select id="selectRoleAndPermsListByUserName" resultType="com.frank.framework.security.entity.RoleAndPerms">
   		SELECT 
 			c.role_key,
-			e.perms 
+			e.perms,
+			e.name AS "menuName"
 		FROM
 			sys_user a LEFT JOIN sys_user_role b ON a.id = b.user_id 
-			LEFT JOIN sys_role c  ON b.role_id = c.id 
+			LEFT JOIN sys_role c  ON b.role_id = c.id AND c.status = '1'
 			LEFT JOIN sys_role_menu d ON c.id = d.role_id 
-			LEFT JOIN sys_menu e ON d.menu_id = e.id AND e.type IN ('2','3')
+			LEFT JOIN sys_menu e ON d.menu_id = e.id
 		WHERE
 		 a.username = #{username}
 		 ORDER BY c.id
