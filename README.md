@@ -22,7 +22,7 @@
 - SpringBoot2.4.1
 - SpringSecurity
 - MyBatis
-- MySql5.6
+- MySql5.7
 - Druid
 - 前端  Layui
 - 前端基于layui的 pear admin layui
@@ -39,6 +39,7 @@
 2.  修改配置文件的数据库链接信息
 3.  由于项目引入了flyway,所以不需要自己手动导入sql脚本，只需要在你自己的数据库中建好配置文件里配置的数据库名即可。 
 4.  启动项目，在浏览器中输 http://localhost:8089/ 即可访问系统
+5.  注意需要mysql5.7版本，mysql5.6版本不支持flyway
 
 #### 系统截图
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/114200_461c1d0b_7897827.png "微信截图_20210604113916.png")

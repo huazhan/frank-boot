@@ -33,7 +33,7 @@ public class DruidConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/**/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapping/**/*.xml"));
         bean.setTypeAliasesPackage("com.frank.**.entity");
         bean.setVfs(SpringBootVFS.class);
         bean.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frank.core.system.dept.mapper.DeptMapper">
+  
+  <select id="selectById" resultType="com.frank.core.system.dept.entity.Dept">
+  		SELECT
+			(select name from sys_dept b where b.id = a.parent_id) parentName,
+			a.* 
+		FROM
+			sys_dept a
+		WHERE
+			id = #{id}
+  </select>
+  
+  <select id="selectChildrenListById" resultType="com.frank.core.system.dept.entity.Dept">
+  	select * from sys_dept where FIND_IN_SET(#{id},ids)
+  </select>
+  
+  <select id="list" resultType="com.frank.core.system.dept.entity.Dept">
+  		select * from sys_dept a
+  		<where>
+  			<if test="name != null and name != ''">
+  				and a.name like concat('%',#{name},'%')
+  			</if>
+  			<if test="leader != null and leader != ''">
+  				and a.leader like concat('%',#{leader},'%')
+  			</if>
+  			<if test="phone != null and phone != ''">
+  				and a.phone like concat('%',#{phone},'%')
+  			</if>
+  			<if test="status != null and status != ''">
+  				and a.status = #{status}
+  			</if>
+  		</where>
+  		order by a.sort, a.create_time
+  </select>
+  
+  <insert id="insert">
+  		insert into sys_dept(
+  			id,
+			parent_id,
+			ids,
+			name,
+			sort,
+			leader,
+			phone,
+			email,
+			status,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			remark
+  		)values(
+  			#{id},
+  			#{parentId},
+			#{ids},
+			#{name},
+			#{sort},
+			#{leader},
+			#{phone},
+			#{email},
+			#{status},
+			#{createTime},
+			#{createBy},
+			#{updateTime},
+			#{updateBy},
+			#{remark}
+  		)
+  </insert>
+  
+  <update id="update">
+  		update sys_dept 
+  		<set>
+  			<if test="parentId != null">
+  				,parent_id = #{parentId}
+  			</if>
+  			<if test="ids != null and ids != ''">
+  				,ids = #{ids}
+  			</if>
+  			<if test="name != null and name != ''">
+  				,name = #{name}
+  			</if>
+  			<if test="sort != null">
+  				,sort = #{sort}
+  			</if>
+  			,leader = #{leader}
+  			,phone = #{phone}
+  			,email = #{email}
+  			<if test="status != null and status != ''">
+  				,status = #{status}
+  			</if>
+  			<if test="updateBy != null and updateBy != ''">
+  				,update_by = #{updateBy}
+  			</if>
+  			<if test="remark != null and remark != ''">
+  				,remark = #{remark}
+  			</if>
+  		</set>
+ 	 	where id = #{id}
+  </update>
+  
+  <update id="updateStatusByParentId">
+  		update sys_dept set status = #{status} where FIND_IN_SET(#{id},ids)
+  </update>
+  
+  <delete id="delete">
+  		delete from sys_dept where FIND_IN_SET(#{id},ids)
+  </delete>
+  
+  <select id="selectMaxId" resultType="java.lang.Long">
+  		select max(id) from sys_dept
+  </select>
+
+  
+  
+</mapper>
