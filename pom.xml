@@ -134,19 +134,28 @@
 		    <version>0.4.8</version>
 		</dependency>
 		<!-- google图片压缩 end -->
-		
+
+		<!-- 高效树形数据转化工具包-->
 		<dependency>
 		    <groupId>site.lizhivscaomei</groupId>
 		    <artifactId>tree-helper</artifactId>
 		    <version>1.0-RELEASE</version>
 		</dependency>
-		
+
+		<!-- 获取系统信息的工具包-->
 		<dependency>
 		    <groupId>com.github.oshi</groupId>
 		    <artifactId>oshi-core</artifactId>
 		    <version>5.7.3</version>
 		</dependency>
-		
+
+		<!-- 数据库版本控制-->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>7.10.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
