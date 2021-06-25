@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frank.core.log.mapper.LoginLogMapper">
+
+  <insert id="insert">
+  		INSERT INTO login_log ( 
+			session_id, 
+			username,
+			ip, 
+			address, 
+			os, 
+			browser, 
+			online,
+			create_time, 
+			create_by, 
+			update_time, 
+			update_by, 
+			remark 
+		)
+		VALUES(
+			#{sessionId}, 
+			#{username}, 
+			#{ip}, 
+			#{address}, 
+			#{os}, 
+			#{browser}, 
+			#{online}, 
+			#{createTime}, 
+			#{createBy}, 
+			#{updateTime}, 
+			#{updateBy}, 
+			#{remark} 
+		)
+  </insert>
+  
+  <select id="updateBySessionId">
+  		UPDATE login_log SET online = '1' WHERE session_id = #{sessionId}
+  </select>
+  
+  <select id="list" resultType="com.frank.core.log.entity.LoginLog">
+  		SELECT * FROM login_log a 
+  		<where>
+  			<if test="username != null and username != ''">
+	  			and a.username like concat('%',#{username},'%')
+  			</if>
+  			<if test="ip != null and ip != ''">
+	  			and a.ip like concat('%',#{ip},'%')
+  			</if>
+  			<if test="online != null and online != ''">
+	  			and a.online = #{online}
+  			</if>
+  		</where>
+  		ORDER BY a.create_time desc
+  </select>
+  
+  
+  
+</mapper>
