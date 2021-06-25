@@ -2,6 +2,7 @@ package com.frank.framework.security.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -44,11 +45,16 @@ public class SessionManageUtil {
 	
 	/**
 	 * 获取 HttpSession
-	 * @param sessionid
+	 * @param sessionId
 	 * @return
 	 */
 	public HttpSession getSession(String sessionId){
         return httpSessionMap.get(sessionId);
     }
+
+    public Set<String> getSessionIdSet(){
+		Set<String> set = httpSessionMap.keySet();
+		return set;
+	}
 	
 }
